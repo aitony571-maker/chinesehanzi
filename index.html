@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Welcome to Chinese Dictionary</title>
+<meta name="robots" content="noindex" />
+<style>
+  :root{
+    --jade-1:#1cb085;
+    --jade-2:#083f3c;
+    --gold:#ffda8c;
+    --cream:#fcf8ee;
+    --muted:#bfe3d7;
+    --red:#e8412e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--cream);
+    background:
+      radial-gradient(1200px 600px at 50% -10%, rgba(28,176,133,.45), transparent 60%),
+      linear-gradient(160deg, #0b3b38 0%, #072a28 55%, #051f1d 100%);
+    min-height:100vh;line-height:1.55;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:46px 24px 80px}
+
+  /* Brand */
+  .brand{display:flex;align-items:center;justify-content:center;gap:11px;margin-bottom:32px}
+  .brand svg{width:40px;height:40px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.3);flex:none}
+  .brand .name{font-size:23px;font-weight:800;line-height:1;
+    background:linear-gradient(180deg,#ffe8ad 0%,#f3c965 58%,#e6af45 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}
+
+  /* Hero */
+  .hero{text-align:center;margin-bottom:14px}
+  .party{font-size:46px;line-height:1;margin-bottom:8px}
+  .hero h1{font-size:38px;font-weight:800;line-height:1.15;margin-bottom:12px}
+  .hero p{font-size:17px;color:var(--muted);max-width:520px;margin:0 auto}
+  .gold{color:var(--gold);font-weight:800}
+
+  /* Section heading / instruction line */
+  .lead{text-align:center;font-size:17px;color:var(--cream);max-width:560px;margin:48px auto 22px}
+  .lead b{color:var(--gold)}
+  .demo-tag{color:var(--gold);font-weight:700;font-size:.9em;opacity:.9}
+  .n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;min-width:26px;border-radius:50%;background:linear-gradient(180deg,#ffe8ad,#f0c25f);color:#3a2c00;font-weight:800;font-size:14px}
+
+  /* Two-line numbered steps */
+  .steps{max-width:430px;margin:48px auto 22px}
+  .steps p{display:flex;align-items:flex-start;gap:12px;font-size:17px;line-height:1.5;color:var(--cream);margin-bottom:12px}
+  .steps .n{margin-top:1px}
+  .steps b{color:var(--gold)}
+
+  /* ---------- Browser mock ---------- */
+  .browser{
+    position:relative;width:620px;max-width:100%;margin:0 auto;
+    background:#fff;border-radius:12px;overflow:visible;
+    box-shadow:0 24px 60px rgba(0,0,0,.45);
+    border:1px solid rgba(0,0,0,.1);
+  }
+  .b-tabs{background:#dee1e6;height:38px;display:flex;align-items:flex-end;padding:0 10px;border-radius:12px 12px 0 0;gap:6px}
+  .b-tab{background:#f6f7f9;height:30px;border-radius:8px 8px 0 0;display:flex;align-items:center;padding:0 12px;gap:8px;font-size:12px;color:#3c4043;min-width:150px}
+  .b-tab .fav{width:13px;height:13px;border-radius:3px;background:linear-gradient(180deg,var(--jade-1),var(--jade-2))}
+  .b-tab .x{margin-left:auto;color:#9aa0a6}
+  .b-plus{color:#5f6368;font-size:18px;margin-left:4px;padding-bottom:4px}
+
+  .b-addr{background:#f6f7f9;height:46px;display:flex;align-items:center;gap:12px;padding:0 14px;border-bottom:1px solid #e6e8eb}
+  .b-nav{display:flex;gap:14px;color:#5f6368;font-size:16px}
+  .b-url{flex:1;background:#fff;border:1px solid #e1e3e6;border-radius:18px;height:30px;display:flex;align-items:center;padding:0 14px;color:#5f6368;font-size:13px}
+  .b-right{display:flex;align-items:center;gap:14px;color:#5f6368;font-size:17px}
+  .b-right .puzzle{filter:grayscale(1)}
+  .b-tile{width:24px;height:24px;display:inline-block;vertical-align:middle;flex:none}
+  .b-avatar{width:22px;height:22px;border-radius:50%;background:#c96}
+
+  .b-view{height:230px;background:#fff;border-radius:0 0 12px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;color:#bdc1c6;position:relative}
+  .b-google{font-size:46px;font-weight:500;letter-spacing:-1px}
+  .b-google .b1{color:#4285F4}.b-google .r{color:#EA4335}.b-google .y{color:#FBBC05}.b-google .b2{color:#4285F4}.b-google .g{color:#34A853}.b-google .e{color:#EA4335}
+  .b-search{width:280px;height:34px;border:1px solid #e1e3e6;border-radius:20px}
+
+  /* Extensions dropdown */
+  .ext-menu{
+    position:absolute;top:84px;right:74px;width:250px;z-index:5;
+    background:#fff;border-radius:12px;box-shadow:0 12px 34px rgba(0,0,0,.28);
+    border:1px solid #e6e8eb;overflow:hidden;text-align:left;
+  }
+  .ext-menu .h{padding:12px 14px 6px;font-size:14px;font-weight:600;color:#202124}
+  .ext-menu .sub{padding:0 14px 10px;font-size:11px;color:#80868b;border-bottom:1px solid #eef0f2}
+  .ext-row{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13px;color:#202124}
+  .ext-row .pin{margin-left:auto;color:#5f6368}
+  .ext-foot{padding:10px 14px;font-size:12px;color:#5f6368;border-top:1px solid #eef0f2;display:flex;align-items:center;gap:8px}
+
+  /* Callouts: red number ring + arrow */
+  .callout{position:absolute;z-index:8;display:flex;align-items:center;gap:6px}
+  .ring{width:37px;height:37px;border-radius:50%;background:linear-gradient(180deg,#ffe8ad,#f0c25f);color:#3a2c00;font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.32)}
+  .arrow{width:56px;height:30px}
+  /* Кольцо-обводка целевого элемента (пазл/пин/иконка) — золотое, как стрелки */
+  .tring{position:absolute;border:3px solid #f0c25f;border-radius:50%;box-sizing:border-box;z-index:7;pointer-events:none}
+
+  /* ---------- Hover demo ---------- */
+  .demo-page{
+    position:relative;width:620px;max-width:100%;margin:0 auto;min-height:300px;
+    background:#fff;border-radius:14px;padding:34px 30px;
+    box-shadow:0 20px 50px rgba(0,0,0,.4);color:#202124;
+  }
+  .demo-page .line{font-size:21px;line-height:2.1;font-family:"Microsoft YaHei","PingFang SC",sans-serif;color:#222}
+  .demo-page .zh{cursor:pointer;border-radius:5px;padding:1px 2px;transition:background .1s}
+  .demo-page .zh:hover,.demo-page .zh.active{background:#cdf2e5}
+  .pop{
+    position:absolute;
+    background:#fff;border-radius:14px;padding:15px 17px;width:250px;
+    box-shadow:0 18px 44px rgba(0,0,0,.30);border:1px solid #e7ebe9;color:#15201d;
+    border-top:3px solid var(--jade-1);z-index:5;
+  }
+  .pop[hidden]{display:none}
+  .pop:before{content:"";position:absolute;top:-10px;left:var(--tx,30px);transform:translateX(-50%);border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:10px solid var(--jade-1)}
+  .pop .hz{font-size:25px;font-weight:700;color:#0f2e2b;font-family:"Microsoft YaHei","PingFang SC",serif}
+  .pop .py{font-size:17px;color:#1cb085;font-weight:700;margin-bottom:9px}
+  .pop .badges{display:flex;gap:7px;margin-bottom:9px}
+  .pop .badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;background:rgba(28,176,133,.12);color:#118a68;border:1px solid rgba(28,176,133,.3)}
+  .pop .mean{color:#3f4f4a;font-size:14px;margin-bottom:10px}
+  .pop .ex{font-size:13px;line-height:1.55;border-top:1px solid #eef0ec;padding-top:8px}
+  .pop .ex .exzh{color:#15201d;font-weight:600;font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+  .pop .ex .expy{color:#1cb085}
+  .pop .ex .exen{color:#7b8a85}
+
+  /* Features */
+  .features{margin-top:60px}
+  .features h2{
+    text-align:center;font-size:34px;font-weight:800;margin-bottom:28px;line-height:1.2;letter-spacing:-.3px;
+    background:linear-gradient(180deg,#ffe8ad 0%,#f3c965 58%,#e6af45 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  }
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .feat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:18px}
+  .feat .ic{font-size:23px;margin-bottom:9px}
+  .feat h3{font-size:15px;font-weight:700;margin-bottom:4px}
+  .feat p{font-size:13.5px;color:var(--muted)}
+
+  /* CTA */
+  .cta{text-align:center;margin-top:58px;position:relative}
+  .cta-h{
+    font-size:32px;font-weight:800;margin-bottom:12px;line-height:1.2;letter-spacing:-.3px;
+    background:linear-gradient(180deg,#ffe8ad 0%,#f3c965 58%,#e6af45 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  }
+  .cta-lead{font-size:16px;color:var(--muted);max-width:480px;margin:0 auto 6px}
+  .cta a{display:inline-block;background:linear-gradient(180deg,var(--gold),#f0c25f);color:#3a2c00;font-weight:800;font-size:18px;text-decoration:none;padding:16px 36px;border-radius:14px;box-shadow:0 10px 26px rgba(255,218,140,.25);transition:transform .15s ease}
+  .cta a:hover{transform:translateY(-2px)}
+  .cta .hint{color:var(--muted);font-size:14px;margin-top:30px;display:flex;align-items:center;justify-content:center;gap:8px}
+  .cta .down-arrow{display:block;margin:0 auto 6px}
+
+  footer{text-align:center;color:#6f8a82;font-size:13px;margin-top:64px}
+
+  @media(max-width:680px){
+    .hero h1{font-size:30px}
+    .grid{grid-template-columns:1fr}
+    .browser,.demo-page{width:100%}
+    .ext-menu{right:10px}
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="ah-red" markerWidth="5.5" markerHeight="5.5" refX="4" refY="2.75" orient="auto"><path d="M0 0 L5.5 2.75 L0 5.5 Z" fill="#e8412e"/></marker>
+    <marker id="ah-gold" markerWidth="5.5" markerHeight="5.5" refX="4" refY="2.75" orient="auto"><path d="M0 0 L5.5 2.75 L0 5.5 Z" fill="#ffda8c"/></marker>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1cb085"/><stop offset="1" stop-color="#083f3c"/></linearGradient>
+  </defs>
+  <symbol id="logo" viewBox="0 0 100 100">
+    <rect x="6" y="6" width="88" height="88" rx="24" fill="url(#tile)"/>
+    <text x="50" y="50" font-size="38" font-weight="800" fill="#fcf8ee" text-anchor="middle" dominant-baseline="central" font-family="'Microsoft YaHei','PingFang SC',serif">中</text>
+    <g stroke="#ffda8c" stroke-width="5" fill="none" stroke-linecap="round">
+      <path d="M21 35 V21 H35"/><path d="M65 21 H79 V35"/><path d="M21 65 V79 H35"/><path d="M65 79 H79 V65"/>
+    </g>
+  </symbol>
+</svg>
+<div class="wrap">
+
+  <!-- Brand -->
+  <div class="brand">
+    <svg viewBox="0 0 100 100" aria-label="Chinese Dictionary"><use href="#logo"/></svg>
+    <div class="name">Chinese <span class="dict">Dictionary</span></div>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="party">🎉</div>
+    <h1>Chinese Dictionary is installed!</h1>
+    <p><span class="gold">Three quick steps</span> to pin it — then just hover over any Chinese word to read it.</p>
+  </div>
+
+  <!-- STEP 1+2: pin -->
+  <div class="steps">
+    <p><span class="n">1</span><span>Click the puzzle piece in the top-right corner of your browser.</span></p>
+    <p><span class="n">2</span><span>Click the pin next to <b>Chinese Dictionary</b>.</span></p>
+  </div>
+
+  <div class="browser">
+    <div class="b-tabs">
+      <div class="b-tab"><span class="fav"></span>新闻 — 维基百科<span class="x">×</span></div>
+      <span class="b-plus">+</span>
+    </div>
+    <div class="b-addr">
+      <div class="b-nav"><span>←</span><span>→</span><span>⟳</span></div>
+      <div class="b-url">🔒 google.com</div>
+      <div class="b-right"><span class="puzzle">🧩</span><span class="b-avatar"></span><span>⋮</span></div>
+    </div>
+    <div class="b-view">
+      <div class="b-google"><span class="b1">G</span><span class="r">o</span><span class="y">o</span><span class="b2">g</span><span class="g">l</span><span class="e">e</span></div>
+      <div class="b-search"></div>
+    </div>
+
+    <!-- extensions dropdown -->
+    <div class="ext-menu">
+      <div class="h">Extensions</div>
+      <div class="sub">No access needed</div>
+      <div class="ext-row"><svg class="b-tile" viewBox="0 0 100 100"><use href="#logo"/></svg>Chinese Dictionary<span class="pin">📌</span></div>
+      <div class="ext-foot">⚙️ Manage extensions</div>
+    </div>
+
+    <!-- target rings around puzzle + pin -->
+    <div class="tring" style="width:32px;height:32px;top:45px;right:66px"></div>
+    <div class="tring" style="width:28px;height:28px;top:161px;right:84px"></div>
+    <!-- callout 1: puzzle -->
+    <div class="callout" style="top:43px;right:110px">
+      <div class="ring">1</div>
+      <svg class="arrow" viewBox="0 0 60 30"><path d="M4 8 C 24 8, 42 15, 56 15" fill="none" stroke="#ffda8c" stroke-width="5.5" stroke-linecap="round" marker-end="url(#ah-gold)"/></svg>
+    </div>
+    <!-- callout 2: pin -->
+    <div class="callout" style="top:156px;right:0px">
+      <svg class="arrow" style="width:50px;height:28px" viewBox="0 0 50 28"><path d="M46 8 C 28 8, 14 14, 4 14" fill="none" stroke="#ffda8c" stroke-width="5.5" stroke-linecap="round" marker-end="url(#ah-gold)"/></svg>
+      <div class="ring">2</div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <p class="lead"><span class="n">3</span> Done — the <b>中</b> icon now lives in your toolbar. Click it anytime to open settings or review your saved words.</p>
+
+  <div class="browser">
+    <div class="b-tabs">
+      <div class="b-tab"><span class="fav"></span>新闻 — 维基百科<span class="x">×</span></div>
+      <span class="b-plus">+</span>
+    </div>
+    <div class="b-addr">
+      <div class="b-nav"><span>←</span><span>→</span><span>⟳</span></div>
+      <div class="b-url">🔒 google.com</div>
+      <div class="b-right"><svg class="b-tile" viewBox="0 0 100 100"><use href="#logo"/></svg><span class="puzzle">🧩</span><span class="b-avatar"></span><span>⋮</span></div>
+    </div>
+    <div class="b-view">
+      <div class="b-google"><span class="b1">G</span><span class="r">o</span><span class="y">o</span><span class="b2">g</span><span class="g">l</span><span class="e">e</span></div>
+      <div class="b-search"></div>
+    </div>
+    <!-- target ring around pinned icon -->
+    <div class="tring" style="width:34px;height:34px;top:44px;right:102px"></div>
+    <!-- callout 3: pinned icon -->
+    <div class="callout" style="top:43px;right:146px">
+      <div class="ring">3</div>
+      <svg class="arrow" viewBox="0 0 60 30"><path d="M4 8 C 24 8, 42 15, 56 15" fill="none" stroke="#ffda8c" stroke-width="5.5" stroke-linecap="round" marker-end="url(#ah-gold)"/></svg>
+    </div>
+  </div>
+
+  <!-- HOW TO USE: hover -->
+  <p class="lead">Now just <b>hover</b> over any word below — try it right here 👇</p>
+
+  <div class="demo-page" id="demo">
+    <div class="line"><span class="zh" data-w="汉语" data-py="Hàn yǔ" data-hsk="1" data-freq="Common" data-mean="Chinese (language)" data-ex="我在学汉语。" data-expy="Wǒ zài xué Hànyǔ." data-exen="I’m learning Chinese.">汉语</span><span class="zh" data-w="是" data-py="shì" data-hsk="1" data-freq="Common" data-mean="to be" data-ex="我是学生。" data-expy="Wǒ shì xuésheng." data-exen="I’m a student.">是</span><span class="zh" data-w="世界" data-py="shì jiè" data-hsk="3" data-freq="Common" data-mean="world" data-ex="世界很大。" data-expy="Shìjiè hěn dà." data-exen="The world is big.">世界</span><span class="zh" data-w="上" data-py="shàng" data-hsk="1" data-freq="Common" data-mean="up; above; on" data-ex="在桌子上。" data-expy="Zài zhuōzi shàng." data-exen="On the table.">上</span><span class="zh" data-w="使用" data-py="shǐ yòng" data-hsk="2" data-freq="Common" data-mean="to use; to employ" data-ex="请使用这个。" data-expy="Qǐng shǐyòng zhège." data-exen="Please use this one.">使用</span><span class="zh" data-w="人数" data-py="rén shù" data-hsk="2" data-freq="Common" data-mean="number of people" data-ex="人数很多。" data-expy="Rénshù hěn duō." data-exen="There are many people.">人数</span><span class="zh" data-w="最多" data-py="zuì duō" data-freq="Common" data-mean="at most; maximum" data-ex="最多五个。" data-expy="Zuìduō wǔ ge." data-exen="Five at most.">最多</span><span class="zh" data-w="的" data-py="de" data-hsk="1" data-freq="Common" data-mean="(possessive particle); of" data-ex="我的书。" data-expy="Wǒ de shū." data-exen="My book.">的</span><span class="zh" data-w="语言" data-py="yǔ yán" data-hsk="2" data-freq="Common" data-mean="language; speech" data-ex="语言是工具。" data-expy="Yǔyán shì gōngjù." data-exen="Language is a tool.">语言</span>，<span class="zh" data-w="属于" data-py="shǔ yú" data-hsk="3" data-freq="Common" data-mean="to belong to" data-ex="这属于我。" data-expy="Zhè shǔyú wǒ." data-exen="This belongs to me.">属于</span><span class="zh" data-w="汉藏语系" data-py="Hàn Zàng yǔ xì" data-mean="Sino-Tibetan language family" data-ex="属于汉藏语系。" data-expy="Shǔyú Hàn-Zàng yǔxì." data-exen="It belongs to the Sino-Tibetan family.">汉藏语系</span>。</div>
+    <div class="pop" id="demoPop" hidden>
+      <div class="hz"></div>
+      <div class="py"></div>
+      <div class="badges"><span class="badge b-hsk"></span><span class="badge b-freq"></span></div>
+      <div class="mean"></div>
+      <div class="ex"><span class="exzh"></span> <span class="expy"></span><br><span class="exen"></span></div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta">
+    <h2 class="cta-h">Ready to put it to the test?</h2>
+    <p class="cta-lead">Time to take it into the wild. We’ll drop you into Chinese Wikipedia in a new tab — go find a character you can’t read and watch your dictionary crack it on the spot.</p>
+    <svg class="down-arrow" width="22" height="52" viewBox="0 0 22 52"><path d="M11 5 V 43" stroke="#ffda8c" stroke-width="3.4" fill="none" stroke-linecap="round" marker-end="url(#ah-gold)"/></svg>
+    <a href="https://zh.wikipedia.org/zh-hans/汉语" target="_blank" rel="noopener">Open Chinese Wikipedia →</a>
+    <div class="hint">Opens Chinese Wikipedia in a new tab — your dictionary’s already running there.</div>
+  </div>
+
+  <footer>Chinese Dictionary · works offline · built for daily reading</footer>
+
+</div>
+
+<script>
+(function () {
+  var demo = document.getElementById('demo');
+  if (!demo) return;
+  var pop = document.getElementById('demoPop');
+  var words = demo.querySelectorAll('.zh');
+  var defaultEl = null;
+
+  function show(el) {
+    words.forEach(function (w) { w.classList.remove('active'); });
+    el.classList.add('active');
+    pop.querySelector('.hz').textContent = el.dataset.w;
+    pop.querySelector('.py').textContent = el.dataset.py;
+    pop.querySelector('.mean').textContent = el.dataset.mean;
+    var hsk = pop.querySelector('.b-hsk');
+    if (el.dataset.hsk) { hsk.textContent = 'HSK ' + el.dataset.hsk; hsk.style.display = ''; }
+    else { hsk.style.display = 'none'; }
+    var freq = pop.querySelector('.b-freq');
+    if (el.dataset.freq) { freq.textContent = el.dataset.freq; freq.style.display = ''; }
+    else { freq.style.display = 'none'; }
+    var ex = pop.querySelector('.ex');
+    if (el.dataset.ex) {
+      ex.style.display = '';
+      ex.querySelector('.exzh').textContent = el.dataset.ex;
+      ex.querySelector('.expy').textContent = el.dataset.expy || '';
+      ex.querySelector('.exen').textContent = el.dataset.exen || '';
+    } else { ex.style.display = 'none'; }
+
+    pop.hidden = false; // make measurable before positioning
+    var dr = demo.getBoundingClientRect();
+    var er = el.getBoundingClientRect();
+    var top = (er.bottom - dr.top) + 8;
+    var wordCenter = (er.left - dr.left) + er.width / 2;
+    var left = wordCenter - pop.offsetWidth / 2;
+    left = Math.max(8, Math.min(left, demo.clientWidth - pop.offsetWidth - 8));
+    pop.style.top = top + 'px';
+    pop.style.left = left + 'px';
+    pop.style.setProperty('--tx', (wordCenter - left) + 'px');
+  }
+
+  // Update the card to whatever word you point at; it stays put — no jumping back.
+  words.forEach(function (el) {
+    if (el.dataset.w === '语言') defaultEl = el;
+    el.addEventListener('mouseenter', function () { show(el); });
+  });
+
+  // Show a card by default so the demo never looks empty
+  if (defaultEl) show(defaultEl);
+})();
+</script>
+</body>
+</html>
