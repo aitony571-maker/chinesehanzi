@@ -45,7 +45,6 @@
   .lead{text-align:center;font-size:17px;color:var(--cream);max-width:560px;margin:48px auto 22px}
   .lead b{color:var(--gold)}
   .lead .ic{width:1.15em;height:1.15em;vertical-align:-.24em;margin:0 1px}
-  .demo-tag{color:var(--gold);font-weight:700;font-size:.9em;opacity:.9}
   .n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;min-width:26px;border-radius:50%;background:linear-gradient(180deg,#ffe8ad,#f0c25f);color:#3a2c00;font-weight:800;font-size:14px}
 
   /* ---------- LIVE SEARCH (hero action) ---------- */
@@ -146,32 +145,6 @@
   .arrow{width:56px;height:30px}
   .tring{position:absolute;border:3px solid #f0c25f;border-radius:50%;box-sizing:border-box;z-index:7;pointer-events:none}
 
-  /* ---------- Hover demo ---------- */
-  .demo-page{
-    position:relative;width:620px;max-width:100%;margin:0 auto;min-height:300px;
-    background:#fff;border-radius:14px;padding:34px 30px;
-    box-shadow:0 20px 50px rgba(0,0,0,.4);color:#202124;
-  }
-  .demo-page .line{font-size:21px;line-height:2.1;font-family:"Microsoft YaHei","PingFang SC",sans-serif;color:#222}
-  .demo-page .zh{cursor:pointer;border-radius:5px;padding:1px 2px;transition:background .1s}
-  .demo-page .zh:hover,.demo-page .zh.active{background:#cdf2e5}
-  .pop{
-    position:absolute;
-    background:#fff;border-radius:14px;padding:15px 17px;width:250px;
-    box-shadow:0 18px 44px rgba(0,0,0,.30);border:1px solid #e7ebe9;color:#15201d;
-    border-top:3px solid var(--jade-1);z-index:5;
-  }
-  .pop[hidden]{display:none}
-  .pop:before{content:"";position:absolute;top:-10px;left:var(--tx,30px);transform:translateX(-50%);border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:10px solid var(--jade-1)}
-  .pop .hz{font-size:25px;font-weight:700;color:#0f2e2b;font-family:"Microsoft YaHei","PingFang SC",serif}
-  .pop .py{font-size:17px;color:#1cb085;font-weight:700;margin-bottom:9px}
-  .pop .badges{display:flex;gap:7px;margin-bottom:9px}
-  .pop .badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;background:rgba(28,176,133,.12);color:#118a68;border:1px solid rgba(28,176,133,.3)}
-  .pop .mean{color:#3f4f4a;font-size:14px;margin-bottom:10px}
-  .pop .ex{font-size:13px;line-height:1.55;border-top:1px solid #eef0ec;padding-top:8px}
-  .pop .ex .exzh{color:#15201d;font-weight:600;font-family:"Microsoft YaHei","PingFang SC",sans-serif}
-  .pop .ex .expy{color:#1cb085}
-  .pop .ex .exen{color:#7b8a85}
 
   /* CTA */
   .cta{text-align:center;margin-top:58px;position:relative}
@@ -190,7 +163,7 @@
 
   @media(max-width:680px){
     .hero h1{font-size:30px}
-    .browser,.demo-page{width:100%}
+    .browser{width:100%}
     .ext-menu{right:10px}
   }
 </style>
@@ -219,30 +192,11 @@
   <div class="hero">
     <div class="party">🎉</div>
     <h1>Chinese Dictionary is installed!</h1>
-    <p>Look up <span class="gold">any</span> Chinese word right now — type Chinese, pinyin, or English. Works fully offline.</p>
+    <p>Your offline Chinese dictionary — look up <span class="gold">any</span> word in Chinese, pinyin, or English.</p>
   </div>
 
-  <!-- LIVE SEARCH (hero action) -->
-  <div class="search-wrap">
-    <div class="search-box">
-      <input id="q" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
-             placeholder="Loading dictionary…" disabled aria-label="Search the dictionary" />
-      <span class="si">🔍</span>
-    </div>
-    <div class="search-hint" id="hint">
-      <span class="spin"></span>Loading the full dictionary — one time, ~9 MB…
-    </div>
-    <div class="chips" id="chips" hidden>
-      <button class="chip" data-q="汉语"><span class="cz">汉语</span> · Chinese</button>
-      <button class="chip" data-q="nihao">nihao · pinyin</button>
-      <button class="chip" data-q="language">language · English</button>
-      <button class="chip" data-q="谢谢"><span class="cz">谢谢</span></button>
-    </div>
-    <div class="results" id="results" aria-live="polite"></div>
-  </div>
-
-  <!-- STEP 1+2: pin -->
-  <p class="lead" style="margin-top:60px">Want it one click away? <b>Pin the icon</b> — then the same search lives in your toolbar.</p>
+  <!-- ① STEP 1+2: pin (anti-loss — comes first so the user never loses the extension) -->
+  <p class="lead" style="margin-top:42px"><b>Pin the icon</b> so you never lose it. It’ll stay just one click away.</p>
   <div class="steps">
     <p><span class="n">1</span><span>Click the puzzle piece in the top-right corner of your browser.</span></p>
     <p><span class="n">2</span><span>Click the pin next to <b>Chinese Dictionary</b>.</span></p>
@@ -286,19 +240,54 @@
     </div>
   </div>
 
-  <!-- HOW TO USE: hover (secondary feature) -->
-  <p class="lead" style="margin-top:60px">There's a second way, too: <b>hover</b> over any Chinese word on any page — try it right here 👇</p>
+  <!-- ① STEP 3: pinned result (the icon now lives in the toolbar) -->
+  <p class="lead"><span class="n">3</span> Done — the <svg class="ic" viewBox="0 0 100 100" aria-label="Chinese Dictionary icon"><use href="#logo"/></svg> icon now lives in your toolbar. Click it anytime to open settings or review your saved words.</p>
 
-  <div class="demo-page" id="demo">
-    <div class="line"><span class="zh" data-w="汉语" data-py="Hàn yǔ" data-hsk="1" data-freq="Common" data-mean="Chinese (language)" data-ex="我在学汉语。" data-expy="Wǒ zài xué Hànyǔ." data-exen="I’m learning Chinese.">汉语</span><span class="zh" data-w="是" data-py="shì" data-hsk="1" data-freq="Common" data-mean="to be" data-ex="我是学生。" data-expy="Wǒ shì xuésheng." data-exen="I’m a student.">是</span><span class="zh" data-w="世界" data-py="shì jiè" data-hsk="3" data-freq="Common" data-mean="world" data-ex="世界很大。" data-expy="Shìjiè hěn dà." data-exen="The world is big.">世界</span><span class="zh" data-w="上" data-py="shàng" data-hsk="1" data-freq="Common" data-mean="up; above; on" data-ex="在桌子上。" data-expy="Zài zhuōzi shàng." data-exen="On the table.">上</span><span class="zh" data-w="使用" data-py="shǐ yòng" data-hsk="2" data-freq="Common" data-mean="to use; to employ" data-ex="请使用这个。" data-expy="Qǐng shǐyòng zhège." data-exen="Please use this one.">使用</span><span class="zh" data-w="人数" data-py="rén shù" data-hsk="2" data-freq="Common" data-mean="number of people" data-ex="人数很多。" data-expy="Rénshù hěn duō." data-exen="There are many people.">人数</span><span class="zh" data-w="最多" data-py="zuì duō" data-freq="Common" data-mean="at most; maximum" data-ex="最多五个。" data-expy="Zuìduō wǔ ge." data-exen="Five at most.">最多</span><span class="zh" data-w="的" data-py="de" data-hsk="1" data-freq="Common" data-mean="(possessive particle); of" data-ex="我的书。" data-expy="Wǒ de shū." data-exen="My book.">的</span><span class="zh" data-w="语言" data-py="yǔ yán" data-hsk="2" data-freq="Common" data-mean="language; speech" data-ex="语言是工具。" data-expy="Yǔyán shì gōngjù." data-exen="Language is a tool.">语言</span>，<span class="zh" data-w="属于" data-py="shǔ yú" data-hsk="3" data-freq="Common" data-mean="to belong to" data-ex="这属于我。" data-expy="Zhè shǔyú wǒ." data-exen="This belongs to me.">属于</span><span class="zh" data-w="汉藏语系" data-py="Hàn Zàng yǔ xì" data-mean="Sino-Tibetan language family" data-ex="属于汉藏语系。" data-expy="Shǔyú Hàn-Zàng yǔxì." data-exen="It belongs to the Sino-Tibetan family.">汉藏语系</span>。</div>
-    <div class="pop" id="demoPop" hidden>
-      <div class="hz"></div>
-      <div class="py"></div>
-      <div class="badges"><span class="badge b-hsk"></span><span class="badge b-freq"></span></div>
-      <div class="mean"></div>
-      <div class="ex"><span class="exzh"></span> <span class="expy"></span><br><span class="exen"></span></div>
+  <div class="browser">
+    <div class="b-tabs">
+      <div class="b-tab"><span class="fav"></span>新闻 — 维基百科<span class="x">×</span></div>
+      <span class="b-plus">+</span>
+    </div>
+    <div class="b-addr">
+      <div class="b-nav"><span>←</span><span>→</span><span>⟳</span></div>
+      <div class="b-url">🔒 google.com</div>
+      <div class="b-right"><svg class="b-tile" viewBox="0 0 100 100"><use href="#logo"/></svg><span class="puzzle">🧩</span><span class="b-avatar"></span><span>⋮</span></div>
+    </div>
+    <div class="b-view">
+      <div class="b-google"><span class="b1">G</span><span class="r">o</span><span class="y">o</span><span class="b2">g</span><span class="g">l</span><span class="e">e</span></div>
+      <div class="b-search"></div>
+    </div>
+    <!-- target ring around pinned icon -->
+    <div class="tring" style="width:34px;height:34px;top:44px;right:102px"></div>
+    <!-- callout 3: pinned icon -->
+    <div class="callout" style="top:43px;right:146px">
+      <div class="ring">3</div>
+      <svg class="arrow" viewBox="0 0 60 30"><path d="M4 8 C 24 8, 42 15, 56 15" fill="none" stroke="#ffda8c" stroke-width="5.5" stroke-linecap="round" marker-end="url(#ah-gold)"/></svg>
     </div>
   </div>
+
+  <!-- ② LIVE SEARCH -->
+  <p class="lead" style="margin-top:60px">Now give it a spin — <b>try any word</b>:</p>
+  <div class="search-wrap">
+    <div class="search-box">
+      <input id="q" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
+             placeholder="Loading dictionary…" disabled aria-label="Search the dictionary" />
+      <span class="si">🔍</span>
+    </div>
+    <div class="search-hint" id="hint">
+      <span class="spin"></span>Getting the dictionary ready…
+    </div>
+    <div class="chips" id="chips" hidden>
+      <button class="chip" data-q="汉语"><span class="cz">汉语</span> · Chinese</button>
+      <button class="chip" data-q="nihao">nihao · pinyin</button>
+      <button class="chip" data-q="language">language · English</button>
+      <button class="chip" data-q="谢谢"><span class="cz">谢谢</span></button>
+    </div>
+    <div class="results" id="results" aria-live="polite"></div>
+  </div>
+
+  <!-- ③ Hover teaser (one line — the real hover demo is the surprise on Wikipedia below) -->
+  <p class="lead" style="margin-top:60px"><b>One more thing</b> — you don’t even have to type. <b>Hover</b> over any Chinese word on any page, and the dictionary pops up right there. 👇</p>
 
   <!-- CTA -->
   <div class="cta">
@@ -306,7 +295,7 @@
     <p class="cta-lead">Time to take it into the wild. We’ll drop you into Chinese Wikipedia in a new tab — go find a character you can’t read and watch your dictionary crack it on the spot.</p>
     <svg class="down-arrow" width="22" height="52" viewBox="0 0 22 52"><path d="M11 5 V 43" stroke="#ffda8c" stroke-width="3.4" fill="none" stroke-linecap="round" marker-end="url(#ah-gold)"/></svg>
     <a href="https://zh.wikipedia.org/zh-hans/汉语" target="_blank" rel="noopener">Open Chinese Wikipedia →</a>
-    <div class="hint">Opens Chinese Wikipedia in a new tab — your dictionary’s already running there.</div>
+    <div class="hint">Opens Chinese Wikipedia in a new tab — just hover over any character you can’t read.</div>
   </div>
 
   <footer>Chinese Dictionary · works offline · built for daily reading · dictionary data: CC-CEDICT (CC BY-SA)</footer>
@@ -314,53 +303,6 @@
 </div>
 
 <script>
-/* ============================ HOVER DEMO (existing) ============================ */
-(function () {
-  var demo = document.getElementById('demo');
-  if (!demo) return;
-  var pop = document.getElementById('demoPop');
-  var words = demo.querySelectorAll('.zh');
-  var defaultEl = null;
-
-  function show(el) {
-    words.forEach(function (w) { w.classList.remove('active'); });
-    el.classList.add('active');
-    pop.querySelector('.hz').textContent = el.dataset.w;
-    pop.querySelector('.py').textContent = el.dataset.py;
-    pop.querySelector('.mean').textContent = el.dataset.mean;
-    var hsk = pop.querySelector('.b-hsk');
-    if (el.dataset.hsk) { hsk.textContent = 'HSK ' + el.dataset.hsk; hsk.style.display = ''; }
-    else { hsk.style.display = 'none'; }
-    var freq = pop.querySelector('.b-freq');
-    if (el.dataset.freq) { freq.textContent = el.dataset.freq; freq.style.display = ''; }
-    else { freq.style.display = 'none'; }
-    var ex = pop.querySelector('.ex');
-    if (el.dataset.ex) {
-      ex.style.display = '';
-      ex.querySelector('.exzh').textContent = el.dataset.ex;
-      ex.querySelector('.expy').textContent = el.dataset.expy || '';
-      ex.querySelector('.exen').textContent = el.dataset.exen || '';
-    } else { ex.style.display = 'none'; }
-
-    pop.hidden = false;
-    var dr = demo.getBoundingClientRect();
-    var er = el.getBoundingClientRect();
-    var top = (er.bottom - dr.top) + 8;
-    var wordCenter = (er.left - dr.left) + er.width / 2;
-    var left = wordCenter - pop.offsetWidth / 2;
-    left = Math.max(8, Math.min(left, demo.clientWidth - pop.offsetWidth - 8));
-    pop.style.top = top + 'px';
-    pop.style.left = left + 'px';
-    pop.style.setProperty('--tx', (wordCenter - left) + 'px');
-  }
-
-  words.forEach(function (el) {
-    if (el.dataset.w === '语言') defaultEl = el;
-    el.addEventListener('mouseenter', function () { show(el); });
-  });
-  if (defaultEl) show(defaultEl);
-})();
-
 /* ============================ LIVE DICTIONARY SEARCH ============================ */
 (function () {
   'use strict';
@@ -501,7 +443,7 @@
     var any=groups.some(function(g){ return g.idx.length>0; });
     if(!any){
       var d=document.createElement('div'); d.className='res-state';
-      d.textContent='No match. Try a Chinese word, pinyin (e.g. nihao), or an English word.';
+      d.textContent='No match. Try a Chinese word, pinyin (e.g., nihao), or an English word.';
       resultsEl.appendChild(d); return;
     }
     groups.forEach(function(g){
@@ -512,7 +454,10 @@
   }
 
   // ---- search ----
-  var LIMIT=12;
+  // Welcome page is an onboarding surface, not a full lookup tool: show only the
+  // top few hits so the user isn't buried in a wall of results and still scrolls
+  // down to the hover demo + CTA. (Full result lists live in the extension itself.)
+  var LIMIT=3;
   function search(raw){
     var q=raw.trim();
     if(!q){ resultsEl.innerHTML=''; return; }
