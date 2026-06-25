@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Welcome to Chinese Dictionary</title>
 <meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230fb574'/%3E%3Ctext x='50' y='54' font-size='74' font-weight='800' text-anchor='middle' dominant-baseline='central' font-family='sans-serif'%3E%E4%B8%AD%3C/text%3E%3C/svg%3E" />
 <style>
   :root{
     --jade-1:#1cb085;
@@ -46,6 +47,54 @@
   .lead .ic{width:1.15em;height:1.15em;vertical-align:-.24em;margin:0 1px}
   .demo-tag{color:var(--gold);font-weight:700;font-size:.9em;opacity:.9}
   .n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;min-width:26px;border-radius:50%;background:linear-gradient(180deg,#ffe8ad,#f0c25f);color:#3a2c00;font-weight:800;font-size:14px}
+
+  /* ---------- LIVE SEARCH (hero action) ---------- */
+  .search-wrap{max-width:560px;margin:30px auto 0}
+  .search-box{position:relative}
+  .search-box input{
+    width:100%;height:60px;border-radius:16px;border:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.06);color:var(--cream);font-size:19px;
+    padding:0 56px 0 22px;outline:none;transition:border-color .15s,background .15s;
+  }
+  .search-box input::placeholder{color:#7fb3a4}
+  .search-box input:focus{border-color:var(--jade-1);background:rgba(255,255,255,.09)}
+  .search-box .si{position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:20px;color:#7fb3a4;pointer-events:none}
+  .search-hint{text-align:center;font-size:13.5px;color:var(--muted);margin-top:11px}
+  .search-hint b{color:var(--gold);font-weight:700}
+  .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .chip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--cream);
+    font-size:14px;padding:7px 14px;border-radius:999px;cursor:pointer;transition:.15s;font-family:inherit}
+  .chip:hover{background:rgba(28,176,133,.18);border-color:var(--jade-1)}
+  .chip .cz{font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+
+  /* Results */
+  .results{max-width:560px;margin:18px auto 0;min-height:8px}
+  .res-state{text-align:center;color:var(--muted);font-size:15px;padding:14px 0}
+  .res-group-label{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    color:#7fb3a4;margin:14px 4px 8px}
+  .card{
+    background:#fff;border-radius:14px;padding:14px 17px;margin-bottom:10px;color:#15201d;
+    box-shadow:0 12px 30px rgba(0,0,0,.30);border-top:3px solid var(--jade-1);
+  }
+  .card-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .card .hz{font-size:27px;font-weight:700;color:#0f2e2b;font-family:"Microsoft YaHei","PingFang SC",serif;line-height:1.1}
+  .card .trad{font-size:14px;color:#7b8a85;font-family:"Microsoft YaHei","PingFang SC",serif}
+  .card .py{font-size:17px;font-weight:700}
+  .card .badges{display:flex;gap:6px;margin-left:auto}
+  .badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;white-space:nowrap}
+  .badge.hsk{background:rgba(28,176,133,.12);color:#118a68;border:1px solid rgba(28,176,133,.3)}
+  .badge.freq{border:1px solid transparent}
+  .badge.freq.common{background:#e8f7ef;color:#1f8a4c}
+  .badge.freq.medium{background:#fff4e0;color:#b9791a}
+  .badge.freq.rare{background:#f0eef5;color:#6b5b95}
+  .card .mean{color:#3f4f4a;font-size:14.5px;margin-top:8px;line-height:1.5}
+  /* Tone colors (pinyin) */
+  .tone1{color:#c0392b}.tone2{color:#2e9e54}.tone3{color:#2477c2}.tone4{color:#8e44ad}.tone5{color:#7f8c8d}
+
+  /* Spinner */
+  .spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(28,176,133,.3);
+    border-top-color:var(--jade-1);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:7px}
+  @keyframes sp{to{transform:rotate(360deg)}}
 
   /* Two-line numbered steps */
   .steps{max-width:430px;margin:48px auto 22px}
@@ -91,11 +140,10 @@
   .ext-row .pin{margin-left:auto;color:#5f6368}
   .ext-foot{padding:10px 14px;font-size:12px;color:#5f6368;border-top:1px solid #eef0f2;display:flex;align-items:center;gap:8px}
 
-  /* Callouts: red number ring + arrow */
+  /* Callouts: number ring + arrow */
   .callout{position:absolute;z-index:8;display:flex;align-items:center;gap:6px}
   .ring{width:37px;height:37px;border-radius:50%;background:linear-gradient(180deg,#ffe8ad,#f0c25f);color:#3a2c00;font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.32)}
   .arrow{width:56px;height:30px}
-  /* Кольцо-обводка целевого элемента (пазл/пин/иконка) — золотое, как стрелки */
   .tring{position:absolute;border:3px solid #f0c25f;border-radius:50%;box-sizing:border-box;z-index:7;pointer-events:none}
 
   /* ---------- Hover demo ---------- */
@@ -125,19 +173,6 @@
   .pop .ex .expy{color:#1cb085}
   .pop .ex .exen{color:#7b8a85}
 
-  /* Features */
-  .features{margin-top:60px}
-  .features h2{
-    text-align:center;font-size:34px;font-weight:800;margin-bottom:28px;line-height:1.2;letter-spacing:-.3px;
-    background:linear-gradient(180deg,#ffe8ad 0%,#f3c965 58%,#e6af45 100%);
-    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
-  }
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-  .feat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:18px}
-  .feat .ic{font-size:23px;margin-bottom:9px}
-  .feat h3{font-size:15px;font-weight:700;margin-bottom:4px}
-  .feat p{font-size:13.5px;color:var(--muted)}
-
   /* CTA */
   .cta{text-align:center;margin-top:58px;position:relative}
   .cta-h{
@@ -155,7 +190,6 @@
 
   @media(max-width:680px){
     .hero h1{font-size:30px}
-    .grid{grid-template-columns:1fr}
     .browser,.demo-page{width:100%}
     .ext-menu{right:10px}
   }
@@ -185,10 +219,30 @@
   <div class="hero">
     <div class="party">🎉</div>
     <h1>Chinese Dictionary is installed!</h1>
-    <p><span class="gold">Three quick steps</span> to pin it — then just hover over any Chinese word to read it.</p>
+    <p>Look up <span class="gold">any</span> Chinese word right now — type Chinese, pinyin, or English. Works fully offline.</p>
+  </div>
+
+  <!-- LIVE SEARCH (hero action) -->
+  <div class="search-wrap">
+    <div class="search-box">
+      <input id="q" type="text" autocomplete="off" autocapitalize="off" spellcheck="false"
+             placeholder="Loading dictionary…" disabled aria-label="Search the dictionary" />
+      <span class="si">🔍</span>
+    </div>
+    <div class="search-hint" id="hint">
+      <span class="spin"></span>Loading the full dictionary — one time, ~9 MB…
+    </div>
+    <div class="chips" id="chips" hidden>
+      <button class="chip" data-q="汉语"><span class="cz">汉语</span> · Chinese</button>
+      <button class="chip" data-q="nihao">nihao · pinyin</button>
+      <button class="chip" data-q="language">language · English</button>
+      <button class="chip" data-q="谢谢"><span class="cz">谢谢</span></button>
+    </div>
+    <div class="results" id="results" aria-live="polite"></div>
   </div>
 
   <!-- STEP 1+2: pin -->
+  <p class="lead" style="margin-top:60px">Want it one click away? <b>Pin the icon</b> — then the same search lives in your toolbar.</p>
   <div class="steps">
     <p><span class="n">1</span><span>Click the puzzle piece in the top-right corner of your browser.</span></p>
     <p><span class="n">2</span><span>Click the pin next to <b>Chinese Dictionary</b>.</span></p>
@@ -232,34 +286,8 @@
     </div>
   </div>
 
-  <!-- STEP 3 -->
-  <p class="lead"><span class="n">3</span> Done — the <svg class="ic" viewBox="0 0 100 100" aria-label="Chinese Dictionary icon"><use href="#logo"/></svg> icon now lives in your toolbar. Click it anytime to open settings or review your saved words.</p>
-
-  <div class="browser">
-    <div class="b-tabs">
-      <div class="b-tab"><span class="fav"></span>新闻 — 维基百科<span class="x">×</span></div>
-      <span class="b-plus">+</span>
-    </div>
-    <div class="b-addr">
-      <div class="b-nav"><span>←</span><span>→</span><span>⟳</span></div>
-      <div class="b-url">🔒 google.com</div>
-      <div class="b-right"><svg class="b-tile" viewBox="0 0 100 100"><use href="#logo"/></svg><span class="puzzle">🧩</span><span class="b-avatar"></span><span>⋮</span></div>
-    </div>
-    <div class="b-view">
-      <div class="b-google"><span class="b1">G</span><span class="r">o</span><span class="y">o</span><span class="b2">g</span><span class="g">l</span><span class="e">e</span></div>
-      <div class="b-search"></div>
-    </div>
-    <!-- target ring around pinned icon -->
-    <div class="tring" style="width:34px;height:34px;top:44px;right:102px"></div>
-    <!-- callout 3: pinned icon -->
-    <div class="callout" style="top:43px;right:146px">
-      <div class="ring">3</div>
-      <svg class="arrow" viewBox="0 0 60 30"><path d="M4 8 C 24 8, 42 15, 56 15" fill="none" stroke="#ffda8c" stroke-width="5.5" stroke-linecap="round" marker-end="url(#ah-gold)"/></svg>
-    </div>
-  </div>
-
-  <!-- HOW TO USE: hover -->
-  <p class="lead">Now just <b>hover</b> over any word below — try it right here 👇</p>
+  <!-- HOW TO USE: hover (secondary feature) -->
+  <p class="lead" style="margin-top:60px">There's a second way, too: <b>hover</b> over any Chinese word on any page — try it right here 👇</p>
 
   <div class="demo-page" id="demo">
     <div class="line"><span class="zh" data-w="汉语" data-py="Hàn yǔ" data-hsk="1" data-freq="Common" data-mean="Chinese (language)" data-ex="我在学汉语。" data-expy="Wǒ zài xué Hànyǔ." data-exen="I’m learning Chinese.">汉语</span><span class="zh" data-w="是" data-py="shì" data-hsk="1" data-freq="Common" data-mean="to be" data-ex="我是学生。" data-expy="Wǒ shì xuésheng." data-exen="I’m a student.">是</span><span class="zh" data-w="世界" data-py="shì jiè" data-hsk="3" data-freq="Common" data-mean="world" data-ex="世界很大。" data-expy="Shìjiè hěn dà." data-exen="The world is big.">世界</span><span class="zh" data-w="上" data-py="shàng" data-hsk="1" data-freq="Common" data-mean="up; above; on" data-ex="在桌子上。" data-expy="Zài zhuōzi shàng." data-exen="On the table.">上</span><span class="zh" data-w="使用" data-py="shǐ yòng" data-hsk="2" data-freq="Common" data-mean="to use; to employ" data-ex="请使用这个。" data-expy="Qǐng shǐyòng zhège." data-exen="Please use this one.">使用</span><span class="zh" data-w="人数" data-py="rén shù" data-hsk="2" data-freq="Common" data-mean="number of people" data-ex="人数很多。" data-expy="Rénshù hěn duō." data-exen="There are many people.">人数</span><span class="zh" data-w="最多" data-py="zuì duō" data-freq="Common" data-mean="at most; maximum" data-ex="最多五个。" data-expy="Zuìduō wǔ ge." data-exen="Five at most.">最多</span><span class="zh" data-w="的" data-py="de" data-hsk="1" data-freq="Common" data-mean="(possessive particle); of" data-ex="我的书。" data-expy="Wǒ de shū." data-exen="My book.">的</span><span class="zh" data-w="语言" data-py="yǔ yán" data-hsk="2" data-freq="Common" data-mean="language; speech" data-ex="语言是工具。" data-expy="Yǔyán shì gōngjù." data-exen="Language is a tool.">语言</span>，<span class="zh" data-w="属于" data-py="shǔ yú" data-hsk="3" data-freq="Common" data-mean="to belong to" data-ex="这属于我。" data-expy="Zhè shǔyú wǒ." data-exen="This belongs to me.">属于</span><span class="zh" data-w="汉藏语系" data-py="Hàn Zàng yǔ xì" data-mean="Sino-Tibetan language family" data-ex="属于汉藏语系。" data-expy="Shǔyú Hàn-Zàng yǔxì." data-exen="It belongs to the Sino-Tibetan family.">汉藏语系</span>。</div>
@@ -281,11 +309,12 @@
     <div class="hint">Opens Chinese Wikipedia in a new tab — your dictionary’s already running there.</div>
   </div>
 
-  <footer>Chinese Dictionary · works offline · built for daily reading</footer>
+  <footer>Chinese Dictionary · works offline · built for daily reading · dictionary data: CC-CEDICT (CC BY-SA)</footer>
 
 </div>
 
 <script>
+/* ============================ HOVER DEMO (existing) ============================ */
 (function () {
   var demo = document.getElementById('demo');
   if (!demo) return;
@@ -313,7 +342,7 @@
       ex.querySelector('.exen').textContent = el.dataset.exen || '';
     } else { ex.style.display = 'none'; }
 
-    pop.hidden = false; // make measurable before positioning
+    pop.hidden = false;
     var dr = demo.getBoundingClientRect();
     var er = el.getBoundingClientRect();
     var top = (er.bottom - dr.top) + 8;
@@ -325,14 +354,225 @@
     pop.style.setProperty('--tx', (wordCenter - left) + 'px');
   }
 
-  // Update the card to whatever word you point at; it stays put — no jumping back.
   words.forEach(function (el) {
     if (el.dataset.w === '语言') defaultEl = el;
     el.addEventListener('mouseenter', function () { show(el); });
   });
-
-  // Show a card by default so the demo never looks empty
   if (defaultEl) show(defaultEl);
+})();
+
+/* ============================ LIVE DICTIONARY SEARCH ============================ */
+(function () {
+  'use strict';
+  var DICT_URL = 'dict-web.json';
+  var input = document.getElementById('q');
+  var hint = document.getElementById('hint');
+  var chips = document.getElementById('chips');
+  var resultsEl = document.getElementById('results');
+
+  // Data (filled after load). E = entries [s, t|0, pinyinNumbered, "g1/g2", hsk|0, rank, zipf]
+  var E = null, EN = null, PY = null, bySimp = new Map(), MAXLEN = 8;
+
+  // ---- pinyin tone rendering (ported from src/core/pinyin.ts) ----
+  var TONE_MARKS = {
+    a:['a','ā','á','ǎ','à'], e:['e','ē','é','ě','è'], i:['i','ī','í','ǐ','ì'],
+    o:['o','ō','ó','ǒ','ò'], u:['u','ū','ú','ǔ','ù'], 'ü':['ü','ǖ','ǘ','ǚ','ǜ']
+  };
+  function toneVowelIndex(letters){
+    var a=letters.indexOf('a'); if(a!==-1) return a;
+    var e=letters.indexOf('e'); if(e!==-1) return e;
+    var ou=letters.indexOf('ou'); if(ou!==-1) return ou;
+    for(var i=letters.length-1;i>=0;i--){ if(TONE_MARKS[letters[i]]) return i; }
+    return -1;
+  }
+  function parseSyllable(raw){
+    var m=/([1-5])$/.exec(raw); var tone=m?+m[1]:0;
+    var body=m?raw.slice(0,-1):raw;
+    body=body.replace(/u:/g,'ü').replace(/U:/g,'Ü').replace(/v/g,'ü').replace(/V/g,'Ü');
+    var upperFirst=body.length>0 && body[0]!==body[0].toLowerCase();
+    var lower=body.toLowerCase(); var display=body;
+    if(tone>=1 && tone<=4){
+      var vi=toneVowelIndex(lower);
+      if(vi!==-1){
+        var marked=TONE_MARKS[lower[vi]][tone];
+        var chars=Array.from(lower); chars[vi]=marked; display=chars.join('');
+        if(upperFirst) display=display.charAt(0).toUpperCase()+display.slice(1);
+      } else display=upperFirst?body:lower;
+    } else display=body;
+    return {display:display, tone:(tone>=1&&tone<=4)?tone:5};
+  }
+  function renderPinyin(pinyinNumbered){
+    var frag=document.createDocumentFragment();
+    var syl=pinyinNumbered.trim().split(/\s+/).filter(Boolean);
+    syl.forEach(function(s,i){
+      var p=parseSyllable(s);
+      var span=document.createElement('span');
+      span.className='tone'+p.tone; span.textContent=p.display;
+      frag.appendChild(span);
+      if(i<syl.length-1) frag.appendChild(document.createTextNode(' '));
+    });
+    return frag;
+  }
+
+  // ---- pinyin search-normalize (ported from src/core/pinyin-check.ts) ----
+  var TONE_TO_BASE={'ā':'a','á':'a','ǎ':'a','à':'a','ē':'e','é':'e','ě':'e','è':'e',
+    'ī':'i','í':'i','ǐ':'i','ì':'i','ō':'o','ó':'o','ǒ':'o','ò':'o',
+    'ū':'u','ú':'u','ǔ':'u','ù':'u','ǖ':'ü','ǘ':'ü','ǚ':'ü','ǜ':'ü'};
+  function normPinyin(raw){
+    var s=raw.toLowerCase().replace(/u:/g,'ü').replace(/v/g,'ü');
+    var out=''; for(var i=0;i<s.length;i++){ var ch=s[i]; out+=(TONE_TO_BASE[ch]||ch); }
+    return out.replace(/ü/g,'v').replace(/[1-5]/g,'').replace(/[^a-z]/g,'');
+  }
+
+  // ---- english tokenizer (ported from src/core/english-tokens.ts) ----
+  var STOP=new Set(['a','an','the','to','of','in','on','at','by','for','with','as','and','or','but',
+    'is','are','be','was','were','been','being','it','its','this','that','these','those','sb','sth','etc']);
+  function tokenizeEnglish(text){
+    var out=[]; var m=text.toLowerCase().match(/[a-z]+/g); if(!m) return out;
+    for(var i=0;i<m.length;i++){ var t=m[i]; if(t.length<2||STOP.has(t)) continue; out.push(t); }
+    return out;
+  }
+  // rankByTokenLists (ported from src/core/search-english.ts) — lists of entry-idx
+  function rankByTokenLists(lists, limit){
+    if(lists.length===0) return [];
+    if(lists.length===1) return lists[0].slice(0,limit);
+    var hit=new Map(), best=new Map();
+    lists.forEach(function(list){
+      list.forEach(function(idx,pos){
+        hit.set(idx,(hit.get(idx)||0)+1);
+        var prev=best.get(idx);
+        if(prev===undefined||pos<prev) best.set(idx,pos);
+      });
+    });
+    return Array.from(hit.keys()).sort(function(a,b){
+      return (hit.get(b)-hit.get(a)) || (best.get(a)-best.get(b));
+    }).slice(0,limit);
+  }
+
+  // ---- CJK detection ----
+  function isCjk(ch){
+    var c=ch.codePointAt(0);
+    return (c>=0x4e00&&c<=0x9fff)||(c>=0x3400&&c<=0x4dbf)||(c>=0x20000&&c<=0x2ebef)||(c>=0xf900&&c<=0xfaff);
+  }
+  function hasCjk(s){ for(var ch of s){ if(isCjk(ch)) return true; } return false; }
+
+  // ---- greedy segment a CJK string into known words ----
+  function segment(text){
+    var chars=Array.from(text); var words=[]; var i=0;
+    while(i<chars.length){
+      if(!isCjk(chars[i])){ i++; continue; }
+      var matched=false; var limit=Math.min(MAXLEN, chars.length-i);
+      for(var L=limit;L>=1;L--){
+        var w=chars.slice(i,i+L).join('');
+        if(bySimp.has(w)){ words.push(w); i+=L; matched=true; break; }
+      }
+      if(!matched) i++;
+    }
+    return words;
+  }
+
+  // ---- frequency tier (ported from src/core/frequency.ts) ----
+  function freqTier(zipf){
+    if(typeof zipf!=='number'||!isFinite(zipf)||zipf===0) return null;
+    if(zipf>=4.5) return 'common'; if(zipf>=3.0) return 'medium'; return 'rare';
+  }
+  var TIER_LABEL={common:'Common',medium:'Mid',rare:'Rare'};
+
+  // ---- card render from entry idx ----
+  function cardEl(idx){
+    var e=E[idx]; // [s,t,p,gloss,hsk,rank,zipf]
+    var card=document.createElement('div'); card.className='card';
+    var head=document.createElement('div'); head.className='card-head';
+    var hz=document.createElement('span'); hz.className='hz'; hz.textContent=e[0]; head.appendChild(hz);
+    if(e[1] && e[1]!==e[0]){ var tr=document.createElement('span'); tr.className='trad'; tr.textContent=e[1]; head.appendChild(tr); }
+    var py=document.createElement('span'); py.className='py'; py.appendChild(renderPinyin(e[2])); head.appendChild(py);
+    var badges=document.createElement('span'); badges.className='badges';
+    if(e[4]){ var hb=document.createElement('span'); hb.className='badge hsk'; hb.textContent='HSK '+e[4]; badges.appendChild(hb); }
+    var tier=freqTier(e[6]);
+    if(tier){ var fb=document.createElement('span'); fb.className='badge freq '+tier;
+      fb.textContent=TIER_LABEL[tier]+(e[5]?' (#'+e[5].toLocaleString('en-US')+')':''); badges.appendChild(fb); }
+    head.appendChild(badges); card.appendChild(head);
+    var mean=document.createElement('div'); mean.className='mean'; mean.textContent=e[3].split('/').join('; '); card.appendChild(mean);
+    return card;
+  }
+
+  function renderGroups(groups){
+    resultsEl.innerHTML='';
+    var any=groups.some(function(g){ return g.idx.length>0; });
+    if(!any){
+      var d=document.createElement('div'); d.className='res-state';
+      d.textContent='No match. Try a Chinese word, pinyin (e.g. nihao), or an English word.';
+      resultsEl.appendChild(d); return;
+    }
+    groups.forEach(function(g){
+      if(g.idx.length===0) return;
+      if(g.label){ var l=document.createElement('div'); l.className='res-group-label'; l.textContent=g.label; resultsEl.appendChild(l); }
+      g.idx.forEach(function(i){ resultsEl.appendChild(cardEl(i)); });
+    });
+  }
+
+  // ---- search ----
+  var LIMIT=12;
+  function search(raw){
+    var q=raw.trim();
+    if(!q){ resultsEl.innerHTML=''; return; }
+    if(hasCjk(q)){
+      // ZH→EN: segment whole input, show each found word (all readings of the first, first reading of rest)
+      var words=segment(q); var seen=new Set(); var idx=[];
+      for(var w of words){
+        var arr=bySimp.get(w)||[];
+        for(var j=0;j<arr.length;j++){ if(!seen.has(arr[j])){ seen.add(arr[j]); idx.push(arr[j]); if(idx.length>=LIMIT) break; } }
+        if(idx.length>=LIMIT) break;
+      }
+      renderGroups([{label:null, idx:idx}]); return;
+    }
+    // Latin: try BOTH english (translation) and pinyin. ICP came for a translation → translation first
+    // (matches MDBG/CC-CEDICT behaviour: "run" → 跑步/走, not pinyin rùn 润). Pinyin shown as 2nd group.
+    var enToks=tokenizeEnglish(q);
+    var enIdx = enToks.length ? rankByTokenLists(enToks.map(function(t){ return EN[t]||[]; }), LIMIT) : [];
+    var norm=normPinyin(q);
+    var pyIdx=(norm && PY[norm]) ? PY[norm].slice(0,LIMIT) : [];
+    // de-dup pinyin against translation (translation has priority)
+    if(enIdx.length){ var es=new Set(enIdx); pyIdx=pyIdx.filter(function(i){ return !es.has(i); }); }
+    var groups=[];
+    if(enIdx.length) groups.push({label: pyIdx.length?'Translation':null, idx:enIdx});
+    if(pyIdx.length) groups.push({label: enIdx.length?'Pinyin':null, idx:pyIdx});
+    if(groups.length===0) groups.push({label:null, idx:[]});
+    renderGroups(groups);
+  }
+
+  // ---- debounce ----
+  var t=null;
+  function onInput(){ clearTimeout(t); t=setTimeout(function(){ search(input.value); }, 90); }
+
+  // ---- load ----
+  function buildBySimp(){
+    for(var i=0;i<E.length;i++){
+      var s=E[i][0]; var a=bySimp.get(s);
+      if(a===undefined){ a=[]; bySimp.set(s,a); } a.push(i);
+    }
+  }
+  fetch(DICT_URL).then(function(r){
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return r.json();
+  }).then(function(data){
+    E=data.e; EN=data.en; PY=data.py;
+    if(data.meta && data.meta.maxWordLen) MAXLEN=data.meta.maxWordLen;
+    buildBySimp();
+    input.disabled=false; input.placeholder='Type Chinese, pinyin, or English…';
+    hint.innerHTML='Try <b>汉语</b> (Chinese) · <b>nihao</b> (pinyin) · <b>language</b> (English)';
+    chips.hidden=false;
+    input.addEventListener('input', onInput);
+    input.focus();
+  }).catch(function(err){
+    hint.textContent='Could not load the dictionary ('+err.message+'). Please refresh.';
+  });
+
+  // chips
+  chips.addEventListener('click', function(ev){
+    var b=ev.target.closest('.chip'); if(!b) return;
+    input.value=b.dataset.q; input.focus(); search(b.dataset.q);
+  });
 })();
 </script>
 </body>
