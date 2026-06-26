@@ -262,7 +262,7 @@
   <div class="hero">
     <div class="party">🎉</div>
     <h1>Chinese Dictionary is installed!</h1>
-    <p>Your offline Chinese dictionary — look up <span class="gold">any</span> word in Chinese, pinyin, or English.</p>
+    <p>Your offline Chinese dictionary — look up <span class="gold">any</span> word in English, pinyin, or Chinese.</p>
   </div>
 
   <!-- ① STEP 1+2: pin (anti-loss — comes first so the user never loses the extension) -->
@@ -360,9 +360,9 @@
   <div class="scroll-cue" aria-hidden="true"><svg width="28" height="17" viewBox="0 0 28 17"><path d="M3 3 L14 14 L25 3" fill="none" stroke="#ffda8c" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
 
   <!-- ② SEE IT IN ACTION — search the dictionary (main function) -->
-  <p class="see-lead">Look up <b>any word</b> in a click — search in <b>English</b>, pinyin, or Chinese.</p>
+  <p class="see-lead">Look up <b>any word</b> in one click — see pinyin, HSK level, and meaning.</p>
 
-  <a class="see-btn" href="https://zh.wikipedia.org/zh-hans/汉语" target="_blank" rel="noopener">See it in Action →</a>
+  <a class="see-btn" href="https://zh.wikipedia.org/zh-hans/汉语" target="_blank" rel="noopener">See It in Action →</a>
 
   <div class="demo">
     <div class="demo-wiki" aria-hidden="true">
@@ -591,8 +591,8 @@
     E=data.e; EN=data.en; PY=data.py;
     if(data.meta && data.meta.maxWordLen) MAXLEN=data.meta.maxWordLen;
     buildBySimp();
-    input.disabled=false; input.placeholder='Type Chinese, pinyin, or English…';
-    hint.innerHTML='Try <b>汉语</b> (Chinese) · <b>nihao</b> (pinyin) · <b>language</b> (English)';
+    input.disabled=false; input.placeholder='Type English, pinyin, or Chinese…';
+    hint.innerHTML='Try <b>language</b> (English) · <b>nihao</b> (pinyin) · <b>汉语</b> (Chinese)';
     chips.hidden=false;
     input.addEventListener('input', onInput);
     // No autofocus on load: the search box now sits below the pin steps, and
