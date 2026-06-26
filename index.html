@@ -262,7 +262,7 @@
   <div class="hero">
     <div class="party">🎉</div>
     <h1>Chinese Dictionary is installed!</h1>
-    <p>Your offline Chinese dictionary — look up <span class="gold">any</span> word in English, pinyin, or Chinese.</p>
+    <p>Your offline Chinese dictionary — look up <span class="gold">any</span> word in English, Chinese, or pinyin.</p>
   </div>
 
   <!-- ① STEP 1+2: pin (anti-loss — comes first so the user never loses the extension) -->
@@ -530,7 +530,7 @@
     var any=groups.some(function(g){ return g.idx.length>0; });
     if(!any){
       var d=document.createElement('div'); d.className='res-state';
-      d.textContent='No match. Try a Chinese word, pinyin (e.g., nihao), or an English word.';
+      d.textContent='No match. Try an English word, a Chinese word, or pinyin (e.g., nihao).';
       resultsEl.appendChild(d); return;
     }
     groups.forEach(function(g){
@@ -591,8 +591,8 @@
     E=data.e; EN=data.en; PY=data.py;
     if(data.meta && data.meta.maxWordLen) MAXLEN=data.meta.maxWordLen;
     buildBySimp();
-    input.disabled=false; input.placeholder='Type English, pinyin, or Chinese…';
-    hint.innerHTML='Try <b>language</b> (English) · <b>nihao</b> (pinyin) · <b>汉语</b> (Chinese)';
+    input.disabled=false; input.placeholder='Type English, Chinese, or pinyin…';
+    hint.innerHTML='Try <b>language</b> (English) · <b>汉语</b> (Chinese) · <b>nihao</b> (pinyin)';
     chips.hidden=false;
     input.addEventListener('input', onInput);
     // No autofocus on load: the search box now sits below the pin steps, and
