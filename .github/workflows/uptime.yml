@@ -1,0 +1,58 @@
+# Availability check for the landing page and the extension listing.
+#
+# Alerting: a failed workflow run e-mails the repository owner, so no third-party
+# uptime service is needed. Change it under Settings -> Notifications -> Actions.
+#
+# Failure means a non-200 status after three attempts. A single timeout must not
+# raise an alarm, otherwise the alerts stop being read.
+
+name: Uptime
+
+on:
+  schedule:
+    # Hourly. GitHub may run it a few minutes late under load, which is fine here.
+    - cron: '0 * * * *'
+  workflow_dispatch: # manual run, to test the check without waiting for the schedule
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check critical URLs
+        run: |
+          set -u
+          URLS="
+          https://chinesehanzi.app/
+          https://chinesehanzi.app/privacy/
+          https://chinesehanzi.app/uninstall/
+          https://chromewebstore.google.com/detail/chinese-dictionary/gklabmfoomgfaonnmoainiiagjhkekbb
+          "
+
+          FAILED=""
+          for url in $URLS; do
+            code=""
+            # Three attempts with a pause: a one-off timeout must not raise an alarm.
+            for attempt in 1 2 3; do
+              code=$(curl -s -o /dev/null -w '%{http_code}' -A 'chinesehanzi-uptime-bot' \
+                     --max-time 20 -L "$url" || echo "000")
+              [ "$code" = "200" ] && break
+              echo "  attempt $attempt for $url -> $code"
+              sleep 10
+            done
+
+            if [ "$code" = "200" ]; then
+              echo "OK   $url"
+            else
+              echo "FAIL $url -> HTTP $code"
+              FAILED="$FAILED$url (HTTP $code)%0A"
+            fi
+          done
+
+          if [ -n "$FAILED" ]; then
+            echo "::error::Unreachable:%0A$FAILED"
+            exit 1
+          fi
+          echo "All checks passed."

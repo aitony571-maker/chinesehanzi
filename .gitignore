@@ -1,0 +1,3 @@
+# 22 MB dictionary blob: not used by the site (the search UI was removed from the page).
+# It is generated from the extension repo, so it does not belong in this one.
+dict-web.json

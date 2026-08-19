@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Welcome to Chinese Dictionary</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230fb574'/%3E%3Ctext x='50' y='54' font-size='74' font-weight='800' text-anchor='middle' dominant-baseline='central' font-family='sans-serif'%3E%E4%B8%AD%3C/text%3E%3C/svg%3E" />
+<style>
+  :root{
+    --jade-1:#1cb085;
+    --jade-2:#083f3c;
+    --gold:#ffda8c;
+    --cream:#fcf8ee;
+    --muted:#bfe3d7;
+    --red:#e8412e;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--cream);
+    background:
+      radial-gradient(1200px 600px at 50% -10%, rgba(28,176,133,.45), transparent 60%),
+      linear-gradient(160deg, #0b3b38 0%, #072a28 55%, #051f1d 100%);
+    min-height:100vh;line-height:1.55;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1150px;margin:0 auto;padding:46px 24px 80px}
+
+  /* Brand */
+  .brand{display:flex;align-items:center;justify-content:center;gap:11px;margin-bottom:32px}
+  .brand svg{width:40px;height:40px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.3);flex:none}
+  .brand .name{font-size:23px;font-weight:800;line-height:1;
+    background:linear-gradient(180deg,#ffe8ad 0%,#f3c965 58%,#e6af45 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;}
+
+  /* Hero */
+  .hero{text-align:center;margin-bottom:14px}
+  .party{font-size:46px;line-height:1;margin-bottom:8px}
+  .hero h1{font-size:48px;font-weight:800;line-height:1.15;margin-bottom:14px}
+  .hero p{font-size:20px;color:var(--muted);max-width:560px;margin:0 auto}
+  .gold{color:var(--gold);font-weight:800}
+
+  /* Section heading / instruction line */
+  .lead{text-align:center;font-size:22px;color:var(--cream);max-width:640px;margin:48px auto 24px}
+  .lead b{color:var(--gold)}
+  .lead .ic{width:1.15em;height:1.15em;vertical-align:-.24em;margin:0 1px}
+  .n{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;min-width:30px;border-radius:50%;background:linear-gradient(180deg,#ffe8ad,#f0c25f);color:#3a2c00;font-weight:800;font-size:16px}
+
+  /* ---------- LIVE SEARCH (hero action) ---------- */
+  .search-cue{text-align:center;font-size:26px;font-weight:800;line-height:1.2;letter-spacing:-.3px;color:var(--cream);max-width:560px;margin:64px auto 16px}
+  .search-cue b{color:var(--gold)}
+  .search-wrap{max-width:560px;margin:0 auto}
+  .search-box{position:relative}
+  .search-box input{
+    width:100%;height:64px;border-radius:16px;border:2px solid var(--jade-1);
+    background:rgba(255,255,255,.10);color:var(--cream);font-size:20px;
+    padding:0 56px 0 32px;outline:none;transition:border-color .15s,background .15s,box-shadow .15s;
+    box-shadow:0 0 0 4px rgba(28,176,133,.12), 0 12px 30px rgba(0,0,0,.35);
+  }
+  .search-box input::placeholder{color:#9fc9bd}
+  .search-box input:focus{border-color:var(--gold);background:rgba(255,255,255,.14);box-shadow:0 0 0 4px rgba(255,218,140,.20), 0 12px 30px rgba(0,0,0,.35)}
+  /* fake blinking caret — signals "click and type here" without a real focus (which would auto-scroll the page) */
+  .search-box .caret{position:absolute;left:23px;top:50%;transform:translateY(-50%);width:2px;height:26px;background:var(--cream);border-radius:1px;pointer-events:none;animation:caret-blink 1.1s step-end infinite}
+  @keyframes caret-blink{0%,50%{opacity:1}50.01%,100%{opacity:0}}
+  .search-box input:focus ~ .caret,
+  .search-box input:disabled ~ .caret{opacity:0;animation:none}
+  .search-box .si{position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:20px;color:#7fb3a4;pointer-events:none}
+  .search-hint{text-align:center;font-size:13.5px;color:var(--muted);margin-top:11px}
+  .search-hint b{color:var(--gold);font-weight:700}
+  .chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .chip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--cream);
+    font-size:14px;padding:7px 14px;border-radius:999px;cursor:pointer;transition:.15s;font-family:inherit}
+  .chip:hover{background:rgba(28,176,133,.18);border-color:var(--jade-1)}
+  .chip .cz{font-family:"Microsoft YaHei","PingFang SC",sans-serif}
+
+  /* Results */
+  .results{max-width:560px;margin:18px auto 0;min-height:8px}
+  .res-state{text-align:center;color:var(--muted);font-size:15px;padding:14px 0}
+  .res-group-label{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    color:#7fb3a4;margin:14px 4px 8px}
+  .card{
+    background:#fff;border-radius:14px;padding:14px 17px;margin-bottom:10px;color:#15201d;
+    box-shadow:0 12px 30px rgba(0,0,0,.30);border-top:3px solid var(--jade-1);
+  }
+  .card-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .card .hz{font-size:27px;font-weight:700;color:#0f2e2b;font-family:"Microsoft YaHei","PingFang SC",serif;line-height:1.1}
+  .card .trad{font-size:14px;color:#7b8a85;font-family:"Microsoft YaHei","PingFang SC",serif}
+  .card .py{font-size:17px;font-weight:700}
+  .card .badges{display:flex;gap:6px;margin-left:auto}
+  .badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;white-space:nowrap}
+  .badge.hsk{background:rgba(28,176,133,.12);color:#118a68;border:1px solid rgba(28,176,133,.3)}
+  .badge.freq{border:1px solid transparent}
+  .badge.freq.common{background:#e8f7ef;color:#1f8a4c}
+  .badge.freq.medium{background:#fff4e0;color:#b9791a}
+  .badge.freq.rare{background:#f0eef5;color:#6b5b95}
+  .card .mean{color:#3f4f4a;font-size:14.5px;margin-top:8px;line-height:1.5}
+  /* Tone colors (pinyin) */
+  .tone1{color:#c0392b}.tone2{color:#2e9e54}.tone3{color:#2477c2}.tone4{color:#8e44ad}.tone5{color:#7f8c8d}
+
+  /* Spinner */
+  .spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(28,176,133,.3);
+    border-top-color:var(--jade-1);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px;margin-right:7px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  /* Two-line numbered steps */
+  .steps{max-width:430px;margin:48px auto 10px}
+  .steps{max-width:470px;margin:48px auto 10px}
+  .steps p{display:flex;align-items:flex-start;gap:13px;font-size:22px;line-height:1.5;color:var(--cream);margin-bottom:14px}
+  .steps .n{margin-top:1px}
+  .steps b{color:var(--gold)}
+
+  /* ---------- Browser mock ---------- */
+  .browser{
+    position:relative;width:500px;max-width:100%;margin:8px auto 0;zoom:2.05;
+    background:#fff;border-radius:12px;overflow:visible;
+    box-shadow:0 24px 60px rgba(0,0,0,.45);
+    border:1px solid rgba(0,0,0,.1);
+  }
+  .b-tabs{background:#d7e3fb;height:38px;display:flex;align-items:flex-end;padding:0 10px;border-radius:12px 12px 0 0;gap:6px}
+  .b-tab{background:#fff;height:31px;border-radius:9px 9px 0 0;display:flex;align-items:center;padding:0 12px;gap:8px;font-size:12px;color:#3c4043;min-width:172px}
+  .b-tab .fav{width:13px;height:13px;border-radius:3px;background:linear-gradient(180deg,var(--jade-1),var(--jade-2))}
+  .b-tab .x{margin-left:auto;color:#9aa0a6}
+  .b-plus{color:#5f6368;font-size:18px;margin-left:4px;padding-bottom:4px}
+  .b-tabchevron{margin-left:auto;color:#5f6368;font-size:11px;align-self:center;padding-bottom:2px}
+
+  .b-addr{background:#fff;height:48px;display:flex;align-items:center;gap:12px;padding:0 12px;border-bottom:1px solid #ededed}
+  .b-nav{display:flex;align-items:center;gap:10px}
+  .b-nav svg{width:18px;height:18px;display:block}
+  .b-nav .ic-back{fill:#5f6368}.b-nav .ic-fwd{fill:#bdc1c6}.b-nav .ic-reload{fill:#5f6368}
+  .b-url{flex:1;background:#f1f3f4;border:1px solid transparent;border-radius:18px;height:32px;display:flex;align-items:center;padding:0 16px;color:#5f6368;font-size:13px}
+  .b-right{display:flex;align-items:center;gap:11px;color:#5f6368;font-size:17px}
+  .b-right svg{width:19px;height:19px;display:block;fill:#5f6368}
+  .b-right .ic-puzzle{width:24px;height:24px}
+  .b-right .b-tile{width:24px;height:24px}
+  .b-right .ic-side{fill:none;stroke:#5f6368;stroke-width:2}
+  .b-div{width:1px;height:20px;background:#dadce0;display:inline-block}
+  .b-tile{width:24px;height:24px;display:inline-block;vertical-align:middle;flex:none}
+  .b-dots{font-size:18px;color:#5f6368;line-height:1}
+  .b-avatar{width:24px;height:24px;border-radius:50%;background:#1a73e8;display:inline-flex;align-items:center;justify-content:center;flex:none}
+  .b-avatar svg{width:16px;height:16px;fill:#fff}
+
+  .b-view{height:165px;background:#fff;border-radius:0 0 12px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#bdc1c6;position:relative}
+  .b-google{font-size:37px;font-weight:500;letter-spacing:-1px}
+  /* scroll-down affordance under each big mock — tells the user there's more below */
+  .scroll-cue{display:flex;justify-content:center;margin:12px auto 0;animation:bob 1.6s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(5px);opacity:1}}
+  .b-google .b1{color:#4285F4}.b-google .r{color:#EA4335}.b-google .y{color:#FBBC05}.b-google .b2{color:#4285F4}.b-google .g{color:#34A853}.b-google .e{color:#EA4335}
+  .b-search{width:300px;height:38px;border:1px solid #e3e5e8;border-radius:22px;display:flex;align-items:center;gap:10px;padding:0 16px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+  .b-search .bs-mag{color:#9aa0a6;font-size:14px}
+  .b-search .bs-sp{flex:1}
+  .b-search svg{width:18px;height:18px;flex:none}
+  .b-plus-btn{width:34px;height:34px;border-radius:50%;background:#edf2fc;color:#3c4043;display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:400}
+  .b-apps{position:absolute;top:12px;right:16px;display:flex;align-items:center;gap:15px;color:#3c4043;font-size:13px}
+  .b-apps .grid{width:18px;height:18px;fill:#5f6368}
+
+  /* Extensions dropdown */
+  .ext-menu{
+    position:absolute;top:84px;right:74px;width:250px;z-index:5;
+    background:#fff;border-radius:12px;box-shadow:0 12px 34px rgba(0,0,0,.28);
+    border:1px solid #e6e8eb;overflow:hidden;text-align:left;
+  }
+  .ext-menu .h{padding:12px 14px 6px;font-size:14px;font-weight:600;color:#202124}
+  .ext-menu .sub{padding:0 14px 10px;font-size:11px;color:#80868b;border-bottom:1px solid #eef0f2}
+  .ext-row{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:13px;color:#202124}
+  .ext-row .pin{margin-left:auto;color:#5f6368;font-size:18px}
+  .ext-foot{padding:10px 14px;font-size:12px;color:#5f6368;border-top:1px solid #eef0f2;display:flex;align-items:center;gap:8px}
+
+  /* Callouts: number ring + arrow */
+  .callout{position:absolute;z-index:8;display:flex;align-items:center;gap:6px}
+  .ring{width:37px;height:37px;border-radius:50%;background:#fff;color:#3a3a3a;font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center;border:3.5px solid var(--red);box-shadow:0 4px 12px rgba(0,0,0,.32)}
+  .arrow{width:56px;height:30px}
+  .tring{position:absolute;border:3px solid var(--red);border-radius:50%;box-sizing:border-box;z-index:7;pointer-events:none}
+
+
+  /* ---------- SEE IT IN ACTION — search the dictionary (main function) ---------- */
+  .see-lead{text-align:center;font-size:28px;font-weight:800;line-height:1.3;letter-spacing:-.2px;color:var(--cream);max-width:640px;margin:58px auto 26px}
+  .see-lead b{color:var(--gold)}
+  .see-btn{display:block;width:max-content;max-width:92%;margin:0 auto 32px;background:linear-gradient(180deg,#f4503c,#e8412e);color:#fff;font-weight:800;font-size:20px;text-decoration:none;padding:18px 46px;border-radius:14px;box-shadow:0 12px 30px rgba(232,65,46,.4);transition:transform .15s ease}
+  .see-btn:hover{transform:translateY(-2px)}
+  
+  
+  .probe{position:relative;width:max-content;max-width:100%;margin:0 auto 26px;background:#fbfaf6;border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.45);border:1px solid rgba(0,0,0,.12);text-align:center;padding:24px 40px 26px}
+  
+  
+  .probe-hint{text-align:center;font-size:25px;font-weight:900;color:var(--gold);margin:0 auto 16px;max-width:640px;letter-spacing:.2px}
+  
+  .probe-arrow{display:flex;justify-content:center;margin:2px auto 10px;color:#31d69b;animation:bob 1.6s ease-in-out infinite}
+  @media(prefers-reduced-motion:reduce){.probe-arrow{animation:none;opacity:.85}}
+  .probe-hint b{font-size:29px;font-weight:900;color:#31d69b;letter-spacing:-.2px;text-decoration:underline;text-decoration-color:rgba(49,214,155,.45);text-decoration-thickness:4px;text-underline-offset:7px}
+  .probe-text{font-size:31px;line-height:1.7;color:#202122;font-family:"Microsoft YaHei","PingFang SC",serif;margin:0;white-space:nowrap}
+  @media(max-width:700px){.probe{padding:18px 18px 20px}.probe-hint{font-size:19px}.probe-hint b{font-size:22px}.probe-text{font-size:21px;white-space:normal}}
+
+  /* CTA */
+  .cta{text-align:center;margin-top:58px;position:relative}
+  .cta-h{
+    font-size:32px;font-weight:800;margin-bottom:12px;line-height:1.2;letter-spacing:-.3px;
+    background:linear-gradient(180deg,#ffe8ad 0%,#f3c965 58%,#e6af45 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+  }
+  .cta-lead{font-size:16px;color:var(--muted);max-width:480px;margin:0 auto 6px}
+  .cta a{display:inline-block;background:linear-gradient(180deg,var(--gold),#f0c25f);color:#3a2c00;font-weight:800;font-size:18px;text-decoration:none;padding:16px 36px;border-radius:14px;box-shadow:0 10px 26px rgba(255,218,140,.25);transition:transform .15s ease}
+  .cta a:hover{transform:translateY(-2px)}
+  .cta .hint{color:var(--muted);font-size:14px;margin-top:30px;display:flex;align-items:center;justify-content:center;gap:8px}
+  .cta .down-arrow{display:block;margin:0 auto 6px}
+
+  footer{text-align:center;color:#6f8a82;font-size:13px;margin-top:64px}
+
+  
+  html[lang="ko"] .hero h1,
+  html[lang="ko"] .hero p,
+  html[lang="ko"] .lead,
+  html[lang="ko"] .steps p,
+  html[lang="ko"] .see-lead,
+  html[lang="ko"] footer{word-break:keep-all}
+
+  @media(max-width:1210px){
+    .browser{zoom:1.6}
+  }
+  @media(max-width:780px){
+    .hero h1{font-size:36px}
+    .browser{width:100%;zoom:1}
+    .ext-menu{right:10px}
+  }
+</style>
+
+<script defer src="https://cloud.umami.is/script.js" data-website-id="dcbdd5f6-a5e8-49ca-9597-1bdd9eb0d65c"></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="ah-red" markerWidth="5.5" markerHeight="5.5" refX="4" refY="2.75" orient="auto"><path d="M0 0 L5.5 2.75 L0 5.5 Z" fill="#e8412e"/></marker>
+    <marker id="ah-gold" markerWidth="5.5" markerHeight="5.5" refX="4" refY="2.75" orient="auto"><path d="M0 0 L5.5 2.75 L0 5.5 Z" fill="#ffda8c"/></marker>
+    <marker id="ah-red2" markerWidth="11" markerHeight="11" refX="5" refY="5.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L11 5.5 L0 11 Z" fill="#e8412e"/></marker>
+    <marker id="ah-red-big" markerWidth="17" markerHeight="17" refX="11" refY="8.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L17 8.5 L0 17 Z" fill="#e8412e"/></marker>
+    <marker id="ah-slim" markerWidth="14" markerHeight="12" refX="6" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L14 6 L0 12 Z" fill="#e8412e"/></marker>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1ad98d"/><stop offset="1" stop-color="#0fb574"/></linearGradient>
+  </defs>
+  <symbol id="logo" viewBox="0 0 100 100">
+    <rect x="6" y="6" width="88" height="88" rx="24" fill="url(#tile)"/>
+    <text x="50" y="50" font-size="74" font-weight="800" fill="#000000" text-anchor="middle" dominant-baseline="central" font-family="'Microsoft YaHei','PingFang SC',serif">中</text>
+  </symbol>
+</svg>
+<div class="wrap">
+
+  <!-- Brand -->
+  <div class="brand">
+    <svg viewBox="0 0 100 100" aria-label="Chinese Dictionary"><use href="#logo"/></svg>
+    <div class="name">Chinese <span class="dict">Dictionary</span></div>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="party">🎉</div>
+    <h1 data-i18n="heroTitle">Chinese Dictionary is <span class="gold">installed</span>!</h1>
+    <p data-i18n="heroSub">Your offline Chinese dictionary — look up <span class="gold">any</span> word in English, Chinese, or pinyin.</p>
+  </div>
+
+  <!-- ① STEP 1+2: pin (anti-loss — comes first so the user never loses the extension) -->
+  <p class="lead" style="margin-top:42px" data-i18n="pinLead"><b>Pin the icon</b> so you never lose it. It’ll stay just one click away.</p>
+  <div class="steps">
+    <p><span class="n">1</span><span data-i18n="step1">Click the puzzle piece in the top-right corner of your browser.</span></p>
+    <p><span class="n">2</span><span data-i18n="step2">Click the pin next to <b>Chinese Dictionary</b>.</span></p>
+  </div>
+
+  <div class="browser">
+    <div class="b-tabs">
+      <div class="b-tab"><span class="fav"></span>新闻 — 维基百科<span class="x">×</span></div>
+      <span class="b-plus">+</span>
+      <span class="b-tabchevron">⌄</span>
+    </div>
+    <div class="b-addr">
+      <div class="b-nav">
+        <svg class="ic-back" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z"/></svg>
+        <svg class="ic-fwd" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+        <svg class="ic-reload" viewBox="0 0 24 24"><path d="M17.65 6.35A7.96 7.96 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4z"/></svg>
+      </div>
+      <div class="b-url">🔒 google.com</div>
+      <div class="b-right">
+        <svg class="ic-puzzle" viewBox="0 0 20 20" style="fill:#5f6368"><path fill-rule="evenodd" d="M4.5 17 c-0.41 0 -0.77 -0.15 -1.06 -0.44 A1.44 1.44 0 0 1 3 15.5 v-2.89 c0 -0.18 0.06 -0.34 0.17 -0.48 a0.65 0.65 0 0 1 0.44 -0.25 a2.28 2.28 0 0 0 1 -0.73 C4.87 10.81 5 10.43 5 10 c0 -0.43 -0.13 -0.81 -0.39 -1.14 a2.28 2.28 0 0 0 -1 -0.73 a0.64 0.64 0 0 1 -0.44 -0.25 A0.78 0.78 0 0 1 3 7.38 V4.5 c0 -0.41 0.15 -0.77 0.44 -1.06 A1.44 1.44 0 0 1 4.5 3 H8 c0 -0.56 0.19 -1.03 0.58 -1.42 A1.93 1.93 0 0 1 10 1 c0.56 0 1.03 0.19 1.42 0.58 c0.39 0.39 0.58 0.86 0.58 1.42 h3.5 c0.41 0 0.77 0.15 1.06 0.44 c0.29 0.29 0.44 0.65 0.44 1.06 V8 a1.94 1.94 0 0 1 1.42 0.58 c0.39 0.39 0.58 0.86 0.58 1.42 c0 0.56 -0.19 1.03 -0.58 1.42 A1.94 1.94 0 0 1 17 12 v3.5 c0 0.41 -0.15 0.77 -0.44 1.06 A1.44 1.44 0 0 1 15.5 17 Z m0 -1.5 h11 v-11 h-11 v2.33 a3.23 3.23 0 0 1 1.47 1.28 C6.32 8.69 6.5 9.32 6.5 10 c0 0.7 -0.18 1.33 -0.53 1.91 A3.12 3.12 0 0 1 4.5 13.17 Z"/></svg>
+        <span class="b-div"></span>
+        <svg class="ic-side" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><line x1="15" y1="4.5" x2="15" y2="19.5"/></svg>
+        <span class="b-avatar"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg></span>
+        <span class="b-dots">⋮</span>
+      </div>
+    </div>
+    <div class="b-view">
+      <div class="b-apps"><span>Gmail</span><span>Images</span><svg class="grid" viewBox="0 0 24 24"><circle cx="5" cy="5" r="1.7"/><circle cx="12" cy="5" r="1.7"/><circle cx="19" cy="5" r="1.7"/><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/><circle cx="5" cy="19" r="1.7"/><circle cx="12" cy="19" r="1.7"/><circle cx="19" cy="19" r="1.7"/></svg></div>
+      <div class="b-google"><span class="b1">G</span><span class="r">o</span><span class="y">o</span><span class="b2">g</span><span class="g">l</span><span class="e">e</span></div>
+      <div class="b-search"><span class="bs-mag">🔍</span><span class="bs-sp"></span><svg class="bs-mic" viewBox="0 0 24 24"><path fill="#4285F4" d="M12 14a3 3 0 003-3V5a3 3 0 00-6 0v6a3 3 0 003 3z"/><path fill="#34A853" d="M17 11a5 5 0 01-10 0H5a7 7 0 006 6.92V21h2v-3.08A7 7 0 0019 11z"/></svg><svg class="bs-lens" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.6" fill="#4285F4"/><path fill="#EA4335" d="M11 3h2v3.2h-2z"/><path fill="#FBBC05" d="M21 11v2h-3.2v-2z"/><path fill="#34A853" d="M11 17.8h2V21h-2z"/><path fill="#4285F4" d="M3 11h3.2v2H3z"/></svg></div>
+      <div class="b-plus-btn">+</div>
+    </div>
+
+    <!-- extensions dropdown -->
+    <div class="ext-menu">
+      <div class="h" data-i18n="chromeExtensions">Extensions</div>
+      <div class="sub" data-i18n="chromeNoAccess">No access needed</div>
+      <div class="ext-row"><svg class="b-tile" viewBox="0 0 100 100"><use href="#logo"/></svg>Chinese Dictionary<span class="pin">📌</span></div>
+      <div class="ext-foot" data-i18n="chromeManage">⚙️ Manage extensions</div>
+    </div>
+
+    <!-- target rings around puzzle + pin -->
+    <div class="tring" style="width:32px;height:32px;top:46px;right:102px"></div>
+    <div class="tring" style="width:30px;height:30px;top:161px;right:86px"></div>
+    <!-- callout 1: puzzle (ring above the window, short arrow down to the puzzle) -->
+    <div class="ring" style="position:absolute;z-index:9;top:-3px;right:132px">1</div>
+    <svg style="position:absolute;z-index:8;left:340px;top:10px;width:60px;height:60px;overflow:visible" viewBox="0 0 60 60"><path d="M19.5 22 L 26.8 32.3" fill="none" stroke="#e8412e" stroke-width="5" stroke-linecap="round" marker-end="url(#ah-red2)"/></svg>
+    <!-- callout 2: pin (ring to the right, arrow out of the ring down-left to the pin) -->
+    <div class="ring" style="position:absolute;z-index:9;top:140px;right:26px">2</div>
+    <svg style="position:absolute;z-index:8;left:405px;top:158px;width:48px;height:28px;overflow:visible" viewBox="0 0 48 28"><path d="M38.1 4.4 L 7.9 13.7" fill="none" stroke="#e8412e" stroke-width="5" stroke-linecap="round" marker-end="url(#ah-red2)"/></svg>
+  </div>
+  <div class="scroll-cue" aria-hidden="true"><svg width="28" height="17" viewBox="0 0 28 17"><path d="M3 3 L14 14 L25 3" fill="none" stroke="#ffda8c" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+  <!-- ① STEP 3: pinned result (the icon now lives in the toolbar) -->
+  <p class="lead"><span class="n">3</span> <span data-i18n="step3"><b>Done</b> — the <svg class="ic" viewBox="0 0 100 100" aria-label="Chinese Dictionary icon"><use href="#logo"/></svg> icon now lives in your toolbar. Click it anytime to open settings or review your saved words.</span></p>
+
+  <div class="browser">
+    <div class="b-tabs">
+      <div class="b-tab"><span class="fav"></span>新闻 — 维基百科<span class="x">×</span></div>
+      <span class="b-plus">+</span>
+      <span class="b-tabchevron">⌄</span>
+    </div>
+    <div class="b-addr">
+      <div class="b-nav">
+        <svg class="ic-back" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20z"/></svg>
+        <svg class="ic-fwd" viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+        <svg class="ic-reload" viewBox="0 0 24 24"><path d="M17.65 6.35A7.96 7.96 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4z"/></svg>
+      </div>
+      <div class="b-url">🔒 google.com</div>
+      <div class="b-right">
+        <svg class="b-tile" viewBox="0 0 100 100"><use href="#logo"/></svg>
+        <svg class="ic-puzzle" viewBox="0 0 20 20" style="fill:#5f6368"><path fill-rule="evenodd" d="M4.5 17 c-0.41 0 -0.77 -0.15 -1.06 -0.44 A1.44 1.44 0 0 1 3 15.5 v-2.89 c0 -0.18 0.06 -0.34 0.17 -0.48 a0.65 0.65 0 0 1 0.44 -0.25 a2.28 2.28 0 0 0 1 -0.73 C4.87 10.81 5 10.43 5 10 c0 -0.43 -0.13 -0.81 -0.39 -1.14 a2.28 2.28 0 0 0 -1 -0.73 a0.64 0.64 0 0 1 -0.44 -0.25 A0.78 0.78 0 0 1 3 7.38 V4.5 c0 -0.41 0.15 -0.77 0.44 -1.06 A1.44 1.44 0 0 1 4.5 3 H8 c0 -0.56 0.19 -1.03 0.58 -1.42 A1.93 1.93 0 0 1 10 1 c0.56 0 1.03 0.19 1.42 0.58 c0.39 0.39 0.58 0.86 0.58 1.42 h3.5 c0.41 0 0.77 0.15 1.06 0.44 c0.29 0.29 0.44 0.65 0.44 1.06 V8 a1.94 1.94 0 0 1 1.42 0.58 c0.39 0.39 0.58 0.86 0.58 1.42 c0 0.56 -0.19 1.03 -0.58 1.42 A1.94 1.94 0 0 1 17 12 v3.5 c0 0.41 -0.15 0.77 -0.44 1.06 A1.44 1.44 0 0 1 15.5 17 Z m0 -1.5 h11 v-11 h-11 v2.33 a3.23 3.23 0 0 1 1.47 1.28 C6.32 8.69 6.5 9.32 6.5 10 c0 0.7 -0.18 1.33 -0.53 1.91 A3.12 3.12 0 0 1 4.5 13.17 Z"/></svg>
+        <span class="b-div"></span>
+        <svg class="ic-side" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><line x1="15" y1="4.5" x2="15" y2="19.5"/></svg>
+        <span class="b-avatar"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg></span>
+        <span class="b-dots">⋮</span>
+      </div>
+    </div>
+    <div class="b-view">
+      <div class="b-apps"><span>Gmail</span><span>Images</span><svg class="grid" viewBox="0 0 24 24"><circle cx="5" cy="5" r="1.7"/><circle cx="12" cy="5" r="1.7"/><circle cx="19" cy="5" r="1.7"/><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/><circle cx="5" cy="19" r="1.7"/><circle cx="12" cy="19" r="1.7"/><circle cx="19" cy="19" r="1.7"/></svg></div>
+      <div class="b-google"><span class="b1">G</span><span class="r">o</span><span class="y">o</span><span class="b2">g</span><span class="g">l</span><span class="e">e</span></div>
+      <div class="b-search"><span class="bs-mag">🔍</span><span class="bs-sp"></span><svg class="bs-mic" viewBox="0 0 24 24"><path fill="#4285F4" d="M12 14a3 3 0 003-3V5a3 3 0 00-6 0v6a3 3 0 003 3z"/><path fill="#34A853" d="M17 11a5 5 0 01-10 0H5a7 7 0 006 6.92V21h2v-3.08A7 7 0 0019 11z"/></svg><svg class="bs-lens" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.6" fill="#4285F4"/><path fill="#EA4335" d="M11 3h2v3.2h-2z"/><path fill="#FBBC05" d="M21 11v2h-3.2v-2z"/><path fill="#34A853" d="M11 17.8h2V21h-2z"/><path fill="#4285F4" d="M3 11h3.2v2H3z"/></svg></div>
+      <div class="b-plus-btn">+</div>
+    </div>
+    <!-- target ring around pinned icon -->
+    <div class="tring" style="width:32px;height:32px;top:46px;right:137px"></div>
+    <!-- callout 3: pinned icon (ring above the window, short arrow down to the icon) -->
+    <div class="ring" style="position:absolute;z-index:9;top:-14px;right:164px">3</div>
+    <svg style="position:absolute;z-index:8;left:312px;top:12px;width:40px;height:48px;overflow:visible" viewBox="0 0 40 48"><path d="M11.4 4.1 L 27.6 36" fill="none" stroke="#e8412e" stroke-width="5" stroke-linecap="round" marker-end="url(#ah-red2)"/></svg>
+  </div>
+  <div class="scroll-cue" aria-hidden="true"><svg width="28" height="17" viewBox="0 0 28 17"><path d="M3 3 L14 14 L25 3" fill="none" stroke="#ffda8c" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+  <!-- ② SEE IT IN ACTION — search the dictionary (main function) -->
+  <p class="see-lead" data-i18n="seeLead">Look up <b>any word</b> in one click — see pinyin, HSK level, and meaning.</p>
+
+  
+  <p class="probe-hint" data-i18n="probeHint">Try it now — <b>hover over any character</b></p>
+  <div class="probe-arrow" aria-hidden="true"><svg width="30" height="18" viewBox="0 0 28 17"><path d="M3 3 L14 14 L25 3" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="probe" data-zhdict-probe>
+    
+    <p class="probe-text">谢谢你，希望你中文学习顺利！</p>
+  </div>
+
+  <a class="see-btn" href="https://zh.wikipedia.org/zh-hans/汉语" target="_blank" rel="noopener" data-i18n="seeBtn">See It in Action →</a>
+
+  
+  <footer data-i18n="footer">Chinese Dictionary · works offline · built for daily reading · dictionary data: CC-CEDICT — CC BY-SA 4.0 (modified) · CFDICT / Chine Informations (FR) — CC BY-SA 3.0 (modified) · CVDICT / Phong Phan (VI) — CC BY-SA 4.0 (modified) · Korean Wiktionary (KO) — CC BY-SA 3.0 (modified) · CedPane — public domain · wordfreq — CC BY-SA 4.0 · Tatoeba — CC BY 2.0 · Hanzi Writer data — Arphic PL · derived dictionary data likewise distributed under CC BY-SA; full attribution inside the extension</footer>
+
+</div>
+
+<script>
+
+(function () {
+  'use strict';
+  var ICON = '<svg class="ic" viewBox="0 0 100 100" aria-label="Chinese Dictionary icon"><use href="#logo"/></svg>';
+
+  var T = {
+    fr: {
+      title: 'Bienvenue dans Chinese Dictionary',
+      heroTitle: 'Chinese Dictionary est <span class="gold">installé</span>&nbsp;!',
+      heroSub: 'Votre dictionnaire chinois hors ligne — cherchez <span class="gold">n’importe quel</span> mot en français, en chinois ou en pinyin.',
+      pinLead: '<b>Épinglez l’icône</b> pour ne jamais la perdre. Elle restera toujours à portée de clic.',
+      step1: 'Cliquez sur l’icône en forme de puzzle, en haut à droite de votre navigateur.',
+      step2: 'Cliquez sur l’épingle à côté de <b>Chinese Dictionary</b>.',
+      step3: '<b>C’est fait</b> — l’icône %ICON% est maintenant dans votre barre d’outils. Cliquez dessus à tout moment pour ouvrir les Paramètres ou réviser vos mots enregistrés.',
+      seeLead: 'Cherchez <b>n’importe quel mot</b> en un clic — le pinyin, le niveau HSK et le sens.',
+      seeBtn: 'Voir un exemple en direct →',
+      chromeExtensions: 'Extensions',
+      chromeNoAccess: 'Aucun accès requis',
+      chromeManage: '⚙️ Gérer les extensions',
+      probeHint: 'Essayez maintenant — <b>survolez n’importe quel caractère</b>',
+      footer: 'Chinese Dictionary · fonctionne hors ligne · pensé pour la lecture quotidienne · données du dictionnaire : CC-CEDICT — CC BY-SA 4.0 (modified) · CFDICT / Chine Informations (FR) — CC BY-SA 3.0 (modified) · CVDICT / Phong Phan (VI) — CC BY-SA 4.0 (modified) · Korean Wiktionary (KO) — CC BY-SA 3.0 (modified) · CedPane — public domain · wordfreq — CC BY-SA 4.0 · Tatoeba — CC BY 2.0 · Hanzi Writer data — Arphic PL · derived dictionary data likewise distributed under CC BY-SA · réalisé avec des données et des polices ouvertes ; attribution complète dans l’extension',
+    },
+    vi: {
+      title: 'Chào mừng đến với Chinese Dictionary',
+      heroTitle: 'Chinese Dictionary đã được <span class="gold">cài đặt</span>!',
+      heroSub: 'Từ điển tiếng Trung ngoại tuyến, hoạt động cả khi không có mạng — tra <span class="gold">bất kỳ</span> từ nào bằng tiếng Việt, tiếng Trung hoặc pinyin.',
+      pinLead: '<b>Ghim biểu tượng</b> để không bao giờ bị lạc mất. Lúc nào nó cũng chỉ cách bạn một cú nhấp chuột.',
+      step1: 'Nhấp vào biểu tượng mảnh ghép ở góc trên bên phải của trình duyệt.',
+      step2: 'Nhấp vào biểu tượng ghim bên cạnh <b>Chinese Dictionary</b>.',
+      step3: '<b>Xong</b> — biểu tượng %ICON% giờ nằm trên thanh công cụ. Nhấp vào biểu tượng đó bất cứ lúc nào để mở cài đặt hoặc ôn lại từ đã lưu.',
+      seeLead: 'Tra <b>bất kỳ từ nào</b> chỉ với một cú nhấp — xem pinyin, cấp độ HSK và nghĩa.',
+      seeBtn: 'Xem thử ngay →',
+      chromeExtensions: 'Tiện ích',
+      chromeNoAccess: 'Không cần quyền truy cập',
+      chromeManage: '⚙️ Quản lý tiện ích',
+      probeHint: 'Thử ngay bây giờ — <b>di chuột lên bất kỳ chữ nào</b>',
+      footer: 'Chinese Dictionary · hoạt động ngoại tuyến · dành cho việc đọc mỗi ngày · dữ liệu từ điển: CC-CEDICT — CC BY-SA 4.0 (modified) · CFDICT / Chine Informations (FR) — CC BY-SA 3.0 (modified) · CVDICT / Phong Phan (VI) — CC BY-SA 4.0 (modified) · Korean Wiktionary (KO) — CC BY-SA 3.0 (modified) · CedPane — public domain · wordfreq — CC BY-SA 4.0 · Tatoeba — CC BY 2.0 · Hanzi Writer data — Arphic PL · derived dictionary data likewise distributed under CC BY-SA · xây dựng từ dữ liệu và phông chữ mở; ghi công đầy đủ nằm trong tiện ích',
+    },
+    ko: {
+      title: 'Chinese Dictionary에 오신 것을 환영합니다',
+      heroTitle: 'Chinese Dictionary <span class="gold">설치 완료</span>!',
+      heroSub: '오프라인 중국어 사전 — 한국어, 중국어, 병음 중 <span class="gold">무엇으로든</span> 단어를 찾아보세요.',
+      pinLead: '<b>아이콘을 고정</b>해 두면 잃어버릴 일이 없습니다. 언제든 클릭 한 번으로 열 수 있습니다.',
+      step1: '브라우저 오른쪽 위의 퍼즐 조각 모양 확장 프로그램 아이콘을 클릭하세요.',
+      step2: '<b>Chinese Dictionary</b> 옆의 고정 핀을 클릭하세요.',
+      step3: '<b>완료</b> — 이제 %ICON% 아이콘이 도구 모음에 있습니다. 언제든 클릭해 설정을 열거나 저장한 단어를 복습하세요.',
+      seeLead: '<b>어떤 단어든</b> 클릭 한 번으로 — 병음, HSK 등급, 뜻까지 한눈에.',
+      seeBtn: '직접 확인해 보기 →',
+      chromeExtensions: '확장 프로그램',
+      chromeNoAccess: '액세스 권한 필요 없음',
+      chromeManage: '⚙️ 확장 프로그램 관리',
+      probeHint: '지금 해 보세요 — <b>아무 글자에나 마우스를 올려 보세요</b>',
+      footer: 'Chinese Dictionary · 오프라인 작동 · 매일 읽기를 위해 만들었습니다 · 사전 데이터: CC-CEDICT — CC BY-SA 4.0 (modified) · CFDICT / Chine Informations (FR) — CC BY-SA 3.0 (modified) · CVDICT / Phong Phan (VI) — CC BY-SA 4.0 (modified) · Korean Wiktionary (KO) — CC BY-SA 3.0 (modified) · CedPane — public domain · wordfreq — CC BY-SA 4.0 · Tatoeba — CC BY 2.0 · Hanzi Writer data — Arphic PL · derived dictionary data likewise distributed under CC BY-SA · 공개 데이터와 폰트로 제작했으며, 전체 출처 표기는 확장 프로그램 안에 있습니다',
+    },
+  };
+
+  function pick() {
+    var q = (new URLSearchParams(location.search).get('lang') || '').toLowerCase();
+    if (q === 'en') return 'en';           // explicit English override
+    if (T[q]) return q;
+    var nav = (navigator.language || '').split('-')[0].toLowerCase();
+    return T[nav] ? nav : 'en';
+  }
+
+  var lang = pick();
+  document.documentElement.lang = lang;    // Korean word wrapping hooks onto html[lang="ko"]
+  if (lang === 'en') return;               // English is the source markup, nothing to swap
+
+  var dict = T[lang];
+  document.title = dict.title;
+  var nodes = document.querySelectorAll('[data-i18n]');
+  for (var i = 0; i < nodes.length; i++) {
+    var key = nodes[i].getAttribute('data-i18n');
+    var val = dict[key];
+    if (val === undefined) continue;       // missing key falls back to English, never to blank
+    nodes[i].innerHTML = val.split('%ICON%').join(ICON);
+  }
+})();
+</script>
+<script>
+/* ============================ LIVE DICTIONARY SEARCH ============================ */
+(function () {
+  'use strict';
+  if(!document.getElementById('q')) return; // search UI removed from welcome — nothing to wire up
+  var DICT_URL = 'dict-web.json';
+  var input = document.getElementById('q');
+  var hint = document.getElementById('hint');
+  var chips = document.getElementById('chips');
+  var resultsEl = document.getElementById('results');
+
+  // Data (filled after load). E = entries [s, t|0, pinyinNumbered, "g1/g2", hsk|0, rank, zipf]
+  var E = null, EN = null, PY = null, bySimp = new Map(), MAXLEN = 8;
+
+  // ---- pinyin tone rendering (ported from src/core/pinyin.ts) ----
+  var TONE_MARKS = {
+    a:['a','ā','á','ǎ','à'], e:['e','ē','é','ě','è'], i:['i','ī','í','ǐ','ì'],
+    o:['o','ō','ó','ǒ','ò'], u:['u','ū','ú','ǔ','ù'], 'ü':['ü','ǖ','ǘ','ǚ','ǜ']
+  };
+  function toneVowelIndex(letters){
+    var a=letters.indexOf('a'); if(a!==-1) return a;
+    var e=letters.indexOf('e'); if(e!==-1) return e;
+    var ou=letters.indexOf('ou'); if(ou!==-1) return ou;
+    for(var i=letters.length-1;i>=0;i--){ if(TONE_MARKS[letters[i]]) return i; }
+    return -1;
+  }
+  function parseSyllable(raw){
+    var m=/([1-5])$/.exec(raw); var tone=m?+m[1]:0;
+    var body=m?raw.slice(0,-1):raw;
+    body=body.replace(/u:/g,'ü').replace(/U:/g,'Ü').replace(/v/g,'ü').replace(/V/g,'Ü');
+    var upperFirst=body.length>0 && body[0]!==body[0].toLowerCase();
+    var lower=body.toLowerCase(); var display=body;
+    if(tone>=1 && tone<=4){
+      var vi=toneVowelIndex(lower);
+      if(vi!==-1){
+        var marked=TONE_MARKS[lower[vi]][tone];
+        var chars=Array.from(lower); chars[vi]=marked; display=chars.join('');
+        if(upperFirst) display=display.charAt(0).toUpperCase()+display.slice(1);
+      } else display=upperFirst?body:lower;
+    } else display=body;
+    return {display:display, tone:(tone>=1&&tone<=4)?tone:5};
+  }
+  function renderPinyin(pinyinNumbered){
+    var frag=document.createDocumentFragment();
+    var syl=pinyinNumbered.trim().split(/\s+/).filter(Boolean);
+    syl.forEach(function(s,i){
+      var p=parseSyllable(s);
+      var span=document.createElement('span');
+      span.className='tone'+p.tone; span.textContent=p.display;
+      frag.appendChild(span);
+      if(i<syl.length-1) frag.appendChild(document.createTextNode(' '));
+    });
+    return frag;
+  }
+
+  // ---- pinyin search-normalize (ported from src/core/pinyin-check.ts) ----
+  var TONE_TO_BASE={'ā':'a','á':'a','ǎ':'a','à':'a','ē':'e','é':'e','ě':'e','è':'e',
+    'ī':'i','í':'i','ǐ':'i','ì':'i','ō':'o','ó':'o','ǒ':'o','ò':'o',
+    'ū':'u','ú':'u','ǔ':'u','ù':'u','ǖ':'ü','ǘ':'ü','ǚ':'ü','ǜ':'ü'};
+  function normPinyin(raw){
+    var s=raw.toLowerCase().replace(/u:/g,'ü').replace(/v/g,'ü');
+    var out=''; for(var i=0;i<s.length;i++){ var ch=s[i]; out+=(TONE_TO_BASE[ch]||ch); }
+    return out.replace(/ü/g,'v').replace(/[1-5]/g,'').replace(/[^a-z]/g,'');
+  }
+
+  // ---- english tokenizer (ported from src/core/english-tokens.ts) ----
+  var STOP=new Set(['a','an','the','to','of','in','on','at','by','for','with','as','and','or','but',
+    'is','are','be','was','were','been','being','it','its','this','that','these','those','sb','sth','etc']);
+  function tokenizeEnglish(text){
+    var out=[]; var m=text.toLowerCase().match(/[a-z]+/g); if(!m) return out;
+    for(var i=0;i<m.length;i++){ var t=m[i]; if(t.length<2||STOP.has(t)) continue; out.push(t); }
+    return out;
+  }
+  // rankByTokenLists (ported from src/core/search-english.ts) — lists of entry-idx
+  function rankByTokenLists(lists, limit){
+    if(lists.length===0) return [];
+    if(lists.length===1) return lists[0].slice(0,limit);
+    var hit=new Map(), best=new Map();
+    lists.forEach(function(list){
+      list.forEach(function(idx,pos){
+        hit.set(idx,(hit.get(idx)||0)+1);
+        var prev=best.get(idx);
+        if(prev===undefined||pos<prev) best.set(idx,pos);
+      });
+    });
+    return Array.from(hit.keys()).sort(function(a,b){
+      return (hit.get(b)-hit.get(a)) || (best.get(a)-best.get(b));
+    }).slice(0,limit);
+  }
+
+  // ---- CJK detection ----
+  function isCjk(ch){
+    var c=ch.codePointAt(0);
+    return (c>=0x4e00&&c<=0x9fff)||(c>=0x3400&&c<=0x4dbf)||(c>=0x20000&&c<=0x2ebef)||(c>=0xf900&&c<=0xfaff);
+  }
+  function hasCjk(s){ for(var ch of s){ if(isCjk(ch)) return true; } return false; }
+
+  // ---- greedy segment a CJK string into known words ----
+  function segment(text){
+    var chars=Array.from(text); var words=[]; var i=0;
+    while(i<chars.length){
+      if(!isCjk(chars[i])){ i++; continue; }
+      var matched=false; var limit=Math.min(MAXLEN, chars.length-i);
+      for(var L=limit;L>=1;L--){
+        var w=chars.slice(i,i+L).join('');
+        if(bySimp.has(w)){ words.push(w); i+=L; matched=true; break; }
+      }
+      if(!matched) i++;
+    }
+    return words;
+  }
+
+  // ---- frequency tier (ported from src/core/frequency.ts) ----
+  function freqTier(zipf){
+    if(typeof zipf!=='number'||!isFinite(zipf)||zipf===0) return null;
+    if(zipf>=4.5) return 'common'; if(zipf>=3.0) return 'medium'; return 'rare';
+  }
+  var TIER_LABEL={common:'Common',medium:'Mid',rare:'Rare'};
+
+  // ---- card render from entry idx ----
+  function cardEl(idx){
+    var e=E[idx]; // [s,t,p,gloss,hsk,rank,zipf]
+    var card=document.createElement('div'); card.className='card';
+    var head=document.createElement('div'); head.className='card-head';
+    var hz=document.createElement('span'); hz.className='hz'; hz.textContent=e[0]; head.appendChild(hz);
+    if(e[1] && e[1]!==e[0]){ var tr=document.createElement('span'); tr.className='trad'; tr.textContent=e[1]; head.appendChild(tr); }
+    var py=document.createElement('span'); py.className='py'; py.appendChild(renderPinyin(e[2])); head.appendChild(py);
+    var badges=document.createElement('span'); badges.className='badges';
+    if(e[4]){ var hb=document.createElement('span'); hb.className='badge hsk'; hb.textContent='HSK '+e[4]; badges.appendChild(hb); }
+    var tier=freqTier(e[6]);
+    if(tier){ var fb=document.createElement('span'); fb.className='badge freq '+tier;
+      fb.textContent=TIER_LABEL[tier]+(e[5]?' (#'+e[5].toLocaleString('en-US')+')':''); badges.appendChild(fb); }
+    head.appendChild(badges); card.appendChild(head);
+    var mean=document.createElement('div'); mean.className='mean'; mean.textContent=e[3].split('/').join('; '); card.appendChild(mean);
+    return card;
+  }
+
+  function renderGroups(groups){
+    resultsEl.innerHTML='';
+    var any=groups.some(function(g){ return g.idx.length>0; });
+    if(!any){
+      var d=document.createElement('div'); d.className='res-state';
+      d.textContent='No match. Try an English word, a Chinese word, or pinyin (e.g., nihao).';
+      resultsEl.appendChild(d); return;
+    }
+    groups.forEach(function(g){
+      if(g.idx.length===0) return;
+      if(g.label){ var l=document.createElement('div'); l.className='res-group-label'; l.textContent=g.label; resultsEl.appendChild(l); }
+      g.idx.forEach(function(i){ resultsEl.appendChild(cardEl(i)); });
+    });
+  }
+
+  // ---- search ----
+  // Welcome page is an onboarding surface, not a full lookup tool: show only the
+  // top 2 hits so the user isn't buried in a wall of results and the CTA below
+  // stays in view. (Full result lists live in the extension itself.)
+  var LIMIT=2;
+  function search(raw){
+    var q=raw.trim();
+    if(!q){ resultsEl.innerHTML=''; return; }
+    if(hasCjk(q)){
+      // ZH→EN: segment whole input, show each found word (all readings of the first, first reading of rest)
+      var words=segment(q); var seen=new Set(); var idx=[];
+      for(var w of words){
+        var arr=bySimp.get(w)||[];
+        for(var j=0;j<arr.length;j++){ if(!seen.has(arr[j])){ seen.add(arr[j]); idx.push(arr[j]); if(idx.length>=LIMIT) break; } }
+        if(idx.length>=LIMIT) break;
+      }
+      renderGroups([{label:null, idx:idx}]); return;
+    }
+    // Latin: try BOTH english (translation) and pinyin. ICP came for a translation → translation first
+    // (matches MDBG/CC-CEDICT behaviour: "run" → 跑步/走, not pinyin rùn 润). Pinyin shown as 2nd group.
+    var enToks=tokenizeEnglish(q);
+    var enIdx = enToks.length ? rankByTokenLists(enToks.map(function(t){ return EN[t]||[]; }), LIMIT) : [];
+    var norm=normPinyin(q);
+    var pyIdx=(norm && PY[norm]) ? PY[norm].slice(0,LIMIT) : [];
+    // de-dup pinyin against translation (translation has priority)
+    if(enIdx.length){ var es=new Set(enIdx); pyIdx=pyIdx.filter(function(i){ return !es.has(i); }); }
+    var groups=[];
+    if(enIdx.length) groups.push({label: pyIdx.length?'Translation':null, idx:enIdx});
+    if(pyIdx.length) groups.push({label: enIdx.length?'Pinyin':null, idx:pyIdx});
+    if(groups.length===0) groups.push({label:null, idx:[]});
+    renderGroups(groups);
+  }
+
+  // ---- debounce ----
+  var t=null;
+  function onInput(){ clearTimeout(t); t=setTimeout(function(){ search(input.value); }, 90); }
+
+  // ---- load ----
+  function buildBySimp(){
+    for(var i=0;i<E.length;i++){
+      var s=E[i][0]; var a=bySimp.get(s);
+      if(a===undefined){ a=[]; bySimp.set(s,a); } a.push(i);
+    }
+  }
+  fetch(DICT_URL).then(function(r){
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    return r.json();
+  }).then(function(data){
+    E=data.e; EN=data.en; PY=data.py;
+    if(data.meta && data.meta.maxWordLen) MAXLEN=data.meta.maxWordLen;
+    buildBySimp();
+    input.disabled=false; input.placeholder='Type English, Chinese, or pinyin…';
+    hint.innerHTML='Try <b>language</b> (English) · <b>汉语</b> (Chinese) · <b>nihao</b> (pinyin)';
+    chips.hidden=false;
+    input.addEventListener('input', onInput);
+    // No autofocus on load: the search box now sits below the pin steps, and
+    // focusing it would auto-scroll the page past the top. Let the user start
+    // from the very top (🎉 + pin instructions).
+  }).catch(function(err){
+    hint.textContent='Could not load the dictionary ('+err.message+'). Please refresh.';
+  });
+
+  // chips
+  chips.addEventListener('click', function(ev){
+    var b=ev.target.closest('.chip'); if(!b) return;
+    input.value=b.dataset.q; input.focus(); search(b.dataset.q);
+  });
+})();
+</script>
+</body>
+</html>
