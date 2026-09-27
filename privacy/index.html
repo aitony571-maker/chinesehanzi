@@ -53,10 +53,10 @@
   </a>
 
   <h1>Privacy Policy</h1>
-  <div class="eff">Effective date: July 23, 2026 · Applies to the Chinese Dictionary Chrome extension and chinesehanzi.app</div>
+  <div class="eff">Effective date: September 27, 2026 · Applies to the Chinese Dictionary Chrome extension and chinesehanzi.app</div>
 
   <div class="lead">
-    <p>Chinese Dictionary runs <strong>entirely on your device</strong>. We do <strong>not</strong> collect, transmit, sell, or share any personal data. The dictionary and everything you save stay on your computer. We have no servers that receive your data, and we use no third-party analytics or trackers.</p>
+    <p>Chinese Dictionary works on your device. Dictionary lookups and everything you save stay on your computer. The one exception is Read aloud: when you record yourself reading a practice sentence, the recording is sent to our server for a pronunciation check, and we do not store it. We do not sell or share personal data, and the extension contains no analytics or trackers.</p>
   </div>
 
   <h2>What the extension stores (on your device only)</h2>
@@ -72,40 +72,47 @@
   <ul>
     <li>It does <strong>not</strong> send your browsing activity, the pages you visit, or the text on those pages to us or any third party.</li>
     <li>It does <strong>not</strong> contain analytics, tracking pixels, advertising, or fingerprinting.</li>
-    <li>It makes <strong>no network requests to external servers while you use it</strong> — the entire dictionary (definitions, example sentences, stroke data, character etymology, HSK word lists) is bundled inside the extension and loaded locally. The only pages we ever open are ordinary links you choose to follow, described under "Optional feedback" below.</li>
+    <li>Apart from Read aloud, it makes <strong>no network requests while you use it</strong>. The entire dictionary (definitions, example sentences, stroke data, character etymology, HSK word lists) is bundled inside the extension and loaded locally. The pages it can open are listed under "Pages the extension can open" below.</li>
     <li>It does <strong>not</strong> collect names, emails, accounts, location, or payment information.</li>
   </ul>
 
   <h2>How lookups work</h2>
-  <p>When you hover over or select Chinese text, the extension reads only that short piece of text and looks it up in the offline dictionary bundled inside the extension. The lookup happens locally in the extension's own background script. The text under your cursor is <strong>not stored</strong> and <strong>not transmitted</strong> anywhere.</p>
+  <p>When you hover over Chinese text, or select Chinese or English text, the extension reads only that short piece of text and looks it up in the offline dictionary bundled inside the extension. The lookup happens locally in the extension's own background script. The text under your cursor is <strong>not stored</strong> and <strong>not transmitted</strong> anywhere.</p>
+
+  <h2>Read aloud</h2>
+  <p>Read aloud lets you practise reading short Chinese sentences that come with the extension. Before your first recording, the extension asks for your agreement, and Chrome asks for access to your microphone. The microphone is used only while you record.</p>
+  <p>When you press record, the extension sends the sentence and your voice recording to our server, which passes them to SpeechSuper, the speech recognition service that scores pronunciation, and returns the result. We do not store recordings. SpeechSuper states that it deletes the audio right after the analysis. Its privacy policy is at speechsuper.com/privacy.html.</p>
+  <p>Read aloud has a free daily limit. Our server keeps only what it needs to count it.</p>
 
   <h2>Permissions</h2>
-  <p>The extension requests the minimum permissions it needs, all used locally:</p>
+  <p>The extension requests the minimum permissions it needs:</p>
   <ul>
     <li><strong>activeTab</strong> — to read the current tab's address only when you click the extension icon (for "turn off on this site" and to start the dictionary on that page).</li>
     <li><strong>storage</strong> — to save your deck, history, and settings on your device.</li>
     <li><strong>scripting</strong> — to turn the dictionary on/off on the current page when you press the shortcut or the "Turn on" button.</li>
-    <li><strong>contextMenus</strong> — to add the right-click "Look up in Chinese Dictionary" item for selected text.</li>
+    <li><strong>contextMenus</strong> — to add the right-click "Look up in Chinese Dictionary" item for selected Chinese or English text.</li>
   </ul>
-  <p>The extension declares <strong>no host permissions</strong> and does not read or modify <strong>any external website</strong>.</p>
+  <p>The extension declares <strong>no host permissions</strong>. To work as a hover dictionary, it reads the text under your cursor on the page you are reading and adds its own popup to that page, all locally in your browser. It does not send the page or its text anywhere. Read aloud needs no permission at install: Chrome asks for the microphone when you first record.</p>
 
-  <h2>Optional feedback</h2>
-  <p>There are exactly two places where the extension can take you to a page outside itself. Both are optional, both are started by you, and neither sends us anything you have not typed yourself.</p>
+  <h2>Pages the extension can open</h2>
+  <p>The extension can open a page outside itself in the cases below. None of them sends us anything you have not typed yourself.</p>
   <ul>
+    <li><strong>When you install it.</strong> The extension opens our welcome page at <a href="https://chinesehanzi.app/">chinesehanzi.app</a> once, so you can see how the dictionary works. This is the only page that opens without a click.</li>
     <li><strong>When you uninstall.</strong> Chrome opens our farewell page at <a href="https://chinesehanzi.app/uninstall/">chinesehanzi.app/uninstall/</a>, which asks one question: why you left. The question is shown in a form hosted by Google Forms, so loading that page means your browser contacts Google, and Google can see the usual technical details of any web request, such as your IP address and browser version. Answering is entirely voluntary — closing the tab is a complete answer. By that point the extension is already gone from your browser and sends nothing.</li>
     <li><strong>When you rate the extension.</strong> The popup can offer a link to the Chrome Web Store review page or to a feedback form hosted by Google Forms. Nothing opens unless you click it, and only the words you type reach us.</li>
+    <li><strong>After the Read aloud daily limit.</strong> The Read aloud page can offer a link to our website <a href="https://chinesepronunciation.app/">chinesepronunciation.app</a>, where you can keep practising. It opens only if you click it, and that website has its own privacy policy.</li>
   </ul>
-  <p>We do not attach any identifier to these pages. We cannot connect a form answer to your saved words, your history, or anything else on your device — that data never leaves it.</p>
+  <p>We do not attach any identifier to these pages. We cannot connect a form answer to your saved words, your history, or anything else on your device, because that data never leaves it.</p>
 
   <h2>Third parties</h2>
-  <p>We use no analytics providers, no advertising networks, and no trackers of any kind inside the extension. The only third party involved anywhere is Google, and only in the two optional cases described above: Google Forms hosts the feedback questions, and the Chrome Web Store hosts the review page. No data is shared with anyone else, because no data leaves your device.</p>
+  <p>We use no analytics providers, no advertising networks, and no trackers of any kind inside the extension. Two outside services can be involved. SpeechSuper checks your recording, only when you record in Read aloud (see above). Google hosts the feedback questions (Google Forms) and the review page (Chrome Web Store), only in the optional cases described above. The website chinesehanzi.app counts page views with Umami, which sets no cookies. Nothing you save in the extension is shared with anyone, because that data never leaves your device.</p>
   <p>The bundled dictionary content is built from open data sources (such as CC-CEDICT, Tatoeba example sentences, and open stroke/HSK data), credited in the extension's "About" section. These are static data files included in the package — they do not receive any information about you.</p>
 
   <h2>Children</h2>
   <p>This extension is a general-audience language tool. It does not knowingly collect any data from anyone, including children.</p>
 
   <h2>Data retention and deletion</h2>
-  <p>Because all data is stored locally, <strong>you are in full control</strong>. You can delete saved words and history from within the extension, clear the extension's storage in your browser, or uninstall the extension to remove everything.</p>
+  <p>Everything you save is stored locally, so <strong>you are in full control</strong>. You can delete saved words and history from within the extension, clear the extension's storage in your browser, or uninstall the extension to remove everything. We do not store Read aloud recordings.</p>
 
   <h2>Changes to this policy</h2>
   <p>If we change how the extension handles data — for example, if we ever add optional, privacy-respecting usage analytics in a future version — we will update this policy, update the extension's Chrome Web Store data disclosures, and where required ask for your consent before any data is collected. The "Effective date" above will reflect the latest version.</p>
